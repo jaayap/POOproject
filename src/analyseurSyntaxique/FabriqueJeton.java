@@ -79,7 +79,7 @@ class FabriqueJeton {
      * @return le jeton associe a une lettre.
      */
     public static Jeton lettre() {
-	return operateurDivise;
+	return lettre;
     }
     
     /**
@@ -135,7 +135,7 @@ class FabriqueJeton {
 	new Jeton(Jeton.Type.OperateurDivise, "/");
     
     /**
-     * Jeton associe a l'operateur d'égalité.
+     * Jeton associe a l'operateur d'ï¿½galitï¿½.
      */
     protected static final Jeton operateurEgal = 
 	new Jeton(Jeton.Type.OperateurEgal, "/");
