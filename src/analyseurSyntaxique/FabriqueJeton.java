@@ -138,7 +138,7 @@ class FabriqueJeton {
      * Jeton associe a l'operateur d'�galit�.
      */
     protected static final Jeton operateurEgal = 
-	new Jeton(Jeton.Type.OperateurEgal, "/");
+	new Jeton(Jeton.Type.OperateurEgal, "=");
     
     /**
      * Jeton associe a un chiffre positif.
@@ -150,7 +150,7 @@ class FabriqueJeton {
      * Jeton associe au chiffre zero.
      */
     protected static final Jeton zero = 
-	new Jeton(Jeton.Type.Zero, "/");
+	new Jeton(Jeton.Type.Zero, "0");
     
     /**
      * Jeton associe a une lettre.
@@ -159,10 +159,10 @@ class FabriqueJeton {
 	new Jeton(Jeton.Type.Lettre, "/");
     
     /**
-     * Jeton associe a une lettre.
+     * Jeton associe au caractere _.
      */
     protected static final Jeton underscore = 
-	new Jeton(Jeton.Type.Underscore, "/");
+	new Jeton(Jeton.Type.Underscore, "_");
     
     
     /**
