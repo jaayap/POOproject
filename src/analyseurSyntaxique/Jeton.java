@@ -141,10 +141,34 @@ public class Jeton {
 	   return type == Jeton.Type.Underscore;
    }
    
+   public boolean estOperateurSi() {
+	   return type == Jeton.Type.Si;
+   }
+   
+   public boolean estOperateurAlors() {
+	   return type == Jeton.Type.Alors;
+   }
+   
+   public boolean estComparateurInferieur() {
+	   return type == Jeton.Type.Inferieur;
+   }
+   
+   public boolean estComparateurSuperieur() {
+	   return type == Jeton.Type.Superieur;
+   }
+   
+   public boolean estComparateurSuperieurOuEgal() {
+	   return type == Jeton.Type.InferieurOuEgal;
+   }
+   
+   public boolean estComparateurInferieurOuEgal() {
+	   return type == Jeton.Type.SuperieurOuEgal;
+   }
+   
    
    public boolean estInconnu() {
 		return type == Jeton.Type.Inconnu;
-	    }
+   }
 
    /**
     * Constructeur logique.
