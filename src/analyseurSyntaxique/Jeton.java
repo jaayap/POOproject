@@ -21,6 +21,13 @@ public class Jeton {
     	Zero,
     	Lettre,
     	Underscore,
+    	Si,//rajouté
+    	Alors,//rajouté
+    	Inferieur,//rajouté
+    	Superieur,//rajouté
+    	InferieurOuEgal,//rajouté
+    	SuperieurOuEgal,//rajouté
+    	DivEgal,//correspond a /= : rajouté
     	FinExpression,
     	Inconnu
     }
