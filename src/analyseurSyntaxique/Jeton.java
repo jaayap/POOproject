@@ -1,7 +1,5 @@
 package analyseurSyntaxique;
 
-
-
 /**
  * Classe representant un jeton de la grammaire.
  */
@@ -12,6 +10,8 @@ public class Jeton {
      * jetons.
      */
     public enum Type {
+    	ParentheseOuvrante,
+    	ParentheseFermante,
     	OperateurPlus,
     	OperateurMoins,
     	OperateurMultiplie,
@@ -19,14 +19,14 @@ public class Jeton {
     	OperateurEgal,
     	Entier,
     	Underscore,
-    	Non,//rajouté+ fonction
-    	Si,//rajouté
-    	Alors,//rajouté
-    	Inferieur,//rajouté
-    	Superieur,//rajouté
-    	InferieurOuEgal,//rajouté
-    	SuperieurOuEgal,//rajouté
-    	Different,//correspond a /= : rajouté
+    	Non,
+    	Si,
+    	Alors,
+    	Inferieur,
+    	Superieur,
+    	InferieurOuEgal,
+    	SuperieurOuEgal,
+    	Different,//correspond a /= 
     	FinExpression,
     	Inconnu
     }
@@ -37,7 +37,7 @@ public class Jeton {
     * @return la valeur de {@link Jeton#type}.
     */
    public Type lireType() {
-	return type;
+	   return type;
    }
 
    /**
@@ -46,7 +46,7 @@ public class Jeton {
     * @return la valeur de {@link Jeton#representation}.
     */
    public String lireRepresentation() {
-	return representation;
+	   return representation;
    }
    
    /**
@@ -56,7 +56,7 @@ public class Jeton {
     *   false.
     */
    public boolean estOperateurPlus() {
-	return type == Jeton.Type.OperateurPlus;
+	 return type == Jeton.Type.OperateurPlus;
    }
 
    /**
@@ -135,6 +135,9 @@ public class Jeton {
    
    public boolean estComparateurDifferent() {
 	   return type == Jeton.Type.Different;
+   }
+   public boolean estNon() {
+	   return type == Jeton.Type.Non;
    }
    
    public boolean estInconnu() {
