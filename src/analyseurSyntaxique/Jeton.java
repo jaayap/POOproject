@@ -17,17 +17,16 @@ public class Jeton {
     	OperateurMultiplie,
     	OperateurDivise,
     	OperateurEgal,
-    	ChiffrePositif,
-    	Zero,
-    	Lettre,
+    	Entier,
     	Underscore,
+    	Non,//rajouté+ fonction
     	Si,//rajouté
     	Alors,//rajouté
     	Inferieur,//rajouté
     	Superieur,//rajouté
     	InferieurOuEgal,//rajouté
     	SuperieurOuEgal,//rajouté
-    	DivEgal,//correspond a /= : rajouté
+    	Different,//correspond a /= : rajouté
     	FinExpression,
     	Inconnu
     }
@@ -101,37 +100,6 @@ public class Jeton {
    }
    
    /**
-    * Indique si ce jeton est associe a un chiffre positif.
-    *
-    * @return true si ce jeton est associe a un chiffre positif sinon 
-    *   false.
-    */
-   public boolean estChiffrePositif() {
-	   return type == Jeton.Type.ChiffrePositif;
-   }
-   
-   /**
-    * Indique si ce jeton est associe au chiffre zero.
-    *
-    * @return true si ce jeton est associe au chiffre zero sinon 
-    *   false.
-    */
-   public boolean estChiffreZero() {
-	   return type == Jeton.Type.Zero;
-   }
-   
-   /**
-    * Indique si ce jeton est associe a une lettre.
-    *
-    * @return true si ce jeton est associe a une lettre sinon 
-    *   false.
-    */
-   public boolean estLettre() {
-	   return type == Jeton.Type.Lettre;
-   }
-   
-   
-   /**
     * Indique si ce jeton est associe au caractere _.
     *
     * @return true si ce jeton est associe au caractere _ sinon 
@@ -165,6 +133,9 @@ public class Jeton {
 	   return type == Jeton.Type.SuperieurOuEgal;
    }
    
+   public boolean estComparateurDifferent() {
+	   return type == Jeton.Type.Different;
+   }
    
    public boolean estInconnu() {
 		return type == Jeton.Type.Inconnu;
