@@ -1,7 +1,10 @@
-package analyseurSyntaxique;
+package sysexp.analyseurSyntaxique;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
+
+import exercice1.FabriqueJeton;
+import exercice1.Jeton;
 
 /**
  * Classe representant un analyseur lexical de la grammaire.
@@ -48,17 +51,18 @@ public class Lexical {
 	return position;
     }
 
+
     /**
      * Extrait puis retourne le jeton suivant.
      *
      * @return le jeton suivant.
      * @throw IOException sur le flot d'entree ne peut etre lu.
      */
-    /*public Jeton suivant() throws IOException {
-
+    public Jeton suivant() throws IOException {
+/*
 	// Si nous sommes a la fin du flot, il faut retourner le jeton associe
 	// a la fin d'expression.
-	if (! avancer()) {
+	if (!avancer()) {
 	    return FabriqueJeton.finExpression();
 	}
 
@@ -67,9 +71,9 @@ public class Lexical {
 	
 
 	// Il faut identifier le jeton.
-	//switch(caractere) {   
+	switch(caractere) {   
  
-	//case '(': // Parenthese ouvrante.
+	case '(': // Parenthese ouvrante.
 	
 	default: // Chiffre ou bien representation inconnue.
 	    if (Character.isDigit(caractere)) {
@@ -79,10 +83,11 @@ public class Lexical {
 	    position ++;
 	    return FabriqueJeton.inconnu(ligne.substring(position - 1, 
 							 position));
-	}
-
-    }
 */
+    	}
+
+    
+
     /**
      * Tente d'avancer dans le flot.
      *
