@@ -3,8 +3,6 @@ package sysexp.analyseurSyntaxique;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
-import exercice1.FabriqueJeton;
-import exercice1.Jeton;
 
 /**
  * Classe representant un analyseur lexical de la grammaire.
@@ -59,6 +57,7 @@ public class Lexical {
      * @throw IOException sur le flot d'entree ne peut etre lu.
      */
     public Jeton suivant() throws IOException {
+		return null;
 /*
 	// Si nous sommes a la fin du flot, il faut retourner le jeton associe
 	// a la fin d'expression.

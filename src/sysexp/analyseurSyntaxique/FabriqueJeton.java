@@ -1,6 +1,5 @@
 package sysexp.analyseurSyntaxique;
 
-import exercice1.Jeton;
 
 
 /**
