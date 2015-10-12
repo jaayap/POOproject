@@ -18,13 +18,23 @@ public class Syntaxique {
 	protected boolean estDeclaration() throws IOException{
 		
 		// est declaration_booleene ou declatation_symbolique ou declaration_entiere
-		if(!estDeclarationBooleene() ||!estDeclarationSymbolique()||!estDeclarationEntiere()){
+		if(!estDeclarationBooleene() || !estDeclarationSymbolique() || !estDeclarationEntiere()){
 			return false;
 		}
 	
 		return true;
 	}
 	protected boolean estDeclarationBooleene() throws IOException{
+		//'faits_booleens' : mot clé
+		if(!estFaitBooleen()){	
+			precharge= lexical.suivant();
+		}
+		//'='
+		if(!precharge.estOperateurEgal()){
+			return false;
+		}
+		//'Faits_Booleens' : liste de fait
+		// ';'
 		return false;
 		
 	}
@@ -36,8 +46,26 @@ public class Syntaxique {
 		return false;
 		
 	}
-	
-	
+	protected boolean estFaitBooleen() throws IOException{
+		return false;
+		
+	}
+	protected boolean estFaitSymbolique() throws IOException{
+		return false;
+		
+	}
+	protected boolean estFaitEntier() throws IOException{
+		return false;
+		
+	}
+	protected boolean estIdentificateur() throws IOException{
+		return false;
+		
+	}
+	protected boolean estListeFait() throws IOException{
+		return false;
+		
+	}
 	
 /*	protected boolean estExpression() throws IOException{
 		// [Additif]
@@ -57,7 +85,7 @@ public class Syntaxique {
 		}
 		return true;
 	}*/
-	/*
+	
 	protected boolean estTerme() throws IOException{
 		//Facteur
 		if(!estFacteur()){
@@ -73,8 +101,7 @@ public class Syntaxique {
 		}
 		return true;
 	}
-	*/
-	/*
+	
 	protected boolean estFacteur() throws IOException {
 		//Entier
 		if(precharge.estEntier()){
@@ -86,7 +113,7 @@ public class Syntaxique {
 		}
 		// (Expression)
 		precharge = lexical.suivant();
-		if(!estExpression()){
+		if(!estDeclaration()){
 			return false;
 		}
 		if(precharge.estParentheseFermante()){
@@ -95,7 +122,7 @@ public class Syntaxique {
 		}
 		return false;
 	}
-	*/
+	
 
 }//Fin de la classe
 

@@ -1,5 +1,7 @@
 package sysexp.analyseurSyntaxique;
 
+import exercice1.Jeton;
+
 /**
  * Classe representant un jeton de la grammaire.
  */
@@ -47,6 +49,26 @@ public class Jeton {
     */
    public String lireRepresentation() {
 	   return representation;
+   }
+   
+   /**
+    * Indique si ce jeton est associe a la parenthese ouvrante.
+    *
+    * @return true si ce jeton est associe a la parenthese ouvrante sinon 
+    *   false.
+    */
+   public boolean estParentheseOuvrante() {
+	return type == Jeton.Type.ParentheseOuvrante;
+   }
+
+   /**
+    * Indique si ce jeton est associe a la parenthese fermante.
+    *
+    * @return true si ce jeton est associe a la parenthese fermante sinon 
+    *   false.
+    */
+   public boolean estParentheseFermante() {
+	return type == Jeton.Type.ParentheseFermante;
    }
    
    /**
@@ -98,7 +120,14 @@ public class Jeton {
    public boolean estOperateurEgal() {
 	   return type == Jeton.Type.OperateurEgal;
    }
-   
+   /**
+    * Indique si ce jeton est associe a un entier.
+    *
+    * @return true si ce jeton est associe a un entier sinon false.
+   */
+   public boolean estEntier() {
+	return type == Jeton.Type.Entier;
+   }
    /**
     * Indique si ce jeton est associe au caractere _.
     *
