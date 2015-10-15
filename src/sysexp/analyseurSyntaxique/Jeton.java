@@ -169,10 +169,21 @@ public class Jeton {
 	   return type == Jeton.Type.Non;
    }
    
+   public boolean estPointVirgule() {
+	   return type == Jeton.Type.FinExpression;
+	}
    public boolean estInconnu() {
 		return type == Jeton.Type.Inconnu;
    }
-
+   /**
+    * Indique si ce jeton est associe a la fin d'expression.
+    *
+    * @return true si ce jeton est associe a la fin d'expression sinon false.
+    */
+   public boolean estFinExpression() {
+	return type == Jeton.Type.FinExpression;
+   }
+   
    /**
     * Constructeur logique.
 	*
@@ -184,14 +195,7 @@ public class Jeton {
 	this.representation = representation;
 	    }
 	    
-	    /**
-	     * Indique si ce jeton est associe a la fin d'expression.
-	     *
-	     * @return true si ce jeton est associe a la fin d'expression sinon false.
-	     */
-	    public boolean estFinExpression() {
-		return type == Jeton.Type.FinExpression;
-	    }
+	   
 
 	    /**
 	     * Type de ce jeton.
@@ -202,5 +206,7 @@ public class Jeton {
 	     * Representation de ce jeton sous forme d'une chaine de caractere.
 	     */
 	    protected final String representation;
+
+	
 	    
 }

@@ -33,9 +33,14 @@ public class Syntaxique {
 		if(!precharge.estOperateurEgal()){
 			return false;
 		}
-		//'Faits_Booleens' : liste de fait
+		//'Faits_Booleens' : liste de fait   _______________HashMap<Fait, listeFaits>
+		//if() precharge = lexical.suivant();
+		
 		// ';'
-		return false;
+		if(!precharge.estPointVirgule()){
+			return false;
+		}
+		return true;
 		
 	}
 	protected boolean estDeclarationSymbolique() throws IOException{
