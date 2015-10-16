@@ -8,7 +8,20 @@ import java.io.LineNumberReader;
  * Classe representant un analyseur lexical de la grammaire.
  */
 public class Lexical {
-
+    /**
+     * Lecteur de cet analyseur.
+     */
+    protected LineNumberReader lecteur;
+    /**
+     * Ligne courante.
+     */
+    protected String ligne;
+    /**
+     * Position courante dans la ligne courante.
+     */
+    protected int position;
+    
+    
     /**
      * Constructeur logique.
      *
@@ -38,8 +51,6 @@ public class Lexical {
 	return ligne;
     }
 
-
-    
     /**
      * Accesseur.
      *
@@ -57,8 +68,7 @@ public class Lexical {
      * @throw IOException sur le flot d'entree ne peut etre lu.
      */
     public Jeton suivant() throws IOException {
-		return null;
-/*
+		
 	// Si nous sommes a la fin du flot, il faut retourner le jeton associe
 	// a la fin d'expression.
 	if (!avancer()) {
@@ -68,9 +78,14 @@ public class Lexical {
 	// Caractere correspondant a la position courante.
 	char caractere = ligne.charAt(position);
 	
+	
+	
+	return null;//TO DO: A changer
+	
+	
 
 	// Il faut identifier le jeton.
-	switch(caractere) {   
+/*	switch(caractere) {   
  
 	case '(': // Parenthese ouvrante.
 	
@@ -129,22 +144,4 @@ public class Lexical {
 
 	}
     }
-
-    
-
-    /**
-     * Lecteur de cet analyseur.
-     */
-    protected LineNumberReader lecteur;
-
-    /**
-     * Ligne courante.
-     */
-    protected String ligne;
-
-    /**
-     * Position courante dans la ligne courante.
-     */
-    protected int position;
-
 }

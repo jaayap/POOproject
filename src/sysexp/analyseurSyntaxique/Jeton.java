@@ -29,6 +29,9 @@ public class Jeton {
     	InferieurOuEgal,
     	SuperieurOuEgal,
     	Different,//correspond a /= 
+    	Virgule,
+    	PointVirgule,
+    	Lettre,
     	FinExpression,
     	Inconnu
     }
@@ -169,9 +172,17 @@ public class Jeton {
 	   return type == Jeton.Type.Non;
    }
    
-   public boolean estPointVirgule() {
-	   return type == Jeton.Type.FinExpression;
+   public boolean estVirgule() {
+	   return type == Jeton.Type.Virgule;
 	}
+   
+   public boolean estPointVirgule() {
+	   return type == Jeton.Type.PointVirgule;
+   }
+   public boolean estLettre() {
+	   return type == Jeton.Type.Lettre;
+   }
+   
    public boolean estInconnu() {
 		return type == Jeton.Type.Inconnu;
    }

@@ -24,17 +24,28 @@ public class Syntaxique {
 	
 		return true;
 	}
+	
 	protected boolean estDeclarationBooleene() throws IOException{
 		//'faits_booleens' : mot clé
 		if(!estFaitBooleen()){	
 			precharge= lexical.suivant();
 		}
+	/*'faits_booleens' est-il un jeton?
+	 * if(precharge.estFaitBooleen()){
+			precharge= lexical.suivant();
+		}
+	*/
 		//'='
 		if(!precharge.estOperateurEgal()){
 			return false;
 		}
 		//'Faits_Booleens' : liste de fait   _______________HashMap<Fait, listeFaits>
 		//if() precharge = lexical.suivant();
+		
+		if(!estFaitsBooleens()){
+			return false;
+		}
+	
 		
 		// ';'
 		if(!precharge.estPointVirgule()){
@@ -43,6 +54,23 @@ public class Syntaxique {
 		return true;
 		
 	}
+	protected boolean estFaitsBooleens() throws IOException{
+		//Fait_Booleen
+		if(!estFaitBooleen()){
+			return false;
+		}
+		// { ',' Fait_Booleen }
+		while(precharge.estVirgule()){
+			//on passe au suivant
+			precharge = lexical.suivant();
+			//Deriere une virgule il doit y avoir un fait_booleen
+			if(!estFaitBooleen()){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	protected boolean estDeclarationSymbolique() throws IOException{
 		return false;
 		
@@ -52,7 +80,10 @@ public class Syntaxique {
 		
 	}
 	protected boolean estFaitBooleen() throws IOException{
+		if(!estIdentificateur()){
 		return false;
+		}
+		return true;
 		
 	}
 	protected boolean estFaitSymbolique() throws IOException{
@@ -64,14 +95,27 @@ public class Syntaxique {
 		
 	}
 	protected boolean estIdentificateur() throws IOException{
-		return false;
 		
-	}
-	protected boolean estListeFait() throws IOException{
-		return false;
-		
+		//Le premier caractere doit etre une lettre
+		if(!estAlphanumerique()){
+			return false;
+		}
+		//{['_'] Alphanumerique }
+		while(precharge.estUnderscore()){
+			precharge = lexical.suivant();
+			if(!estAlphanumerique()){
+				return false;
+			}
+		}
+		return true;
 	}
 	
+	protected boolean estAlphanumerique() throws IOException{
+		if(!precharge.estEntier() || !precharge.estLettre()){
+			return false;
+		}
+		return true;
+	}
 /*	protected boolean estExpression() throws IOException{
 		// [Additif]
 		if(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
