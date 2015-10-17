@@ -1,22 +1,69 @@
 package sysexp;
 import java.io.IOException;
 
+/**
+ * Classe representant un analyseur syntaxique de la grammaire.
+ */
+
 public class Syntaxique {
-	protected Lexical lexical;
-	protected Jeton precharge;
-	
+	/**
+	 * Analyseur lexical.
+     */
+    protected Lexical lexical;
+
+    /**
+     * Dernier jeton precharge.
+     */
+    protected Jeton precharge;
+    
+	 /**
+     * Constructeur logique.
+     *
+     * @param lecteur la valeur de {@link Syntaxique#lexical}.
+     */
 	public Syntaxique(Lexical lexical){
 		this.lexical = lexical;
 	}
-	
-	
+	 
+	/**
+     * Accesseur.
+     *
+     * @return la valeur de {@link Syntaxique#lexical}.
+     */
+    public Lexical lireLexical() {
+	return lexical;
+    }
+    
+    /**
+     * Analyse l'expression connectee a l'analyseur lexical.
+     *
+     * @return true si l'expression est syntaxiquement correcte sinon false.
+     * @throw IOException si l'analyseur lexical ne parvient pas a lire
+     *   l'expression.
+     */
 	public boolean verifier() throws IOException{
+		// Pre-chargement du premier jeton.
 		precharge = lexical.suivant();
-		return estDeclaration() && precharge.estFinExpression();
+		
+		// Appel de la methode associee a la regle "Declaration".
+		if (! estDeclaration()) {
+		    return false;
+		}
+		
+		// Il faut verifier que nous avons atteint la fin du texte.
+		return precharge.estFinExpression();
+
+		//return estDeclaration() && precharge.estFinExpression();
 	}
 	
 	//méthodes liées aux Déclarations
-	
+	/**
+	 * Methode associee a la regle "Declaration".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
 	protected boolean estDeclaration() throws IOException{
 		
 		// est declaration_booleene ou declatation_symbolique ou declaration_entiere
@@ -25,7 +72,13 @@ public class Syntaxique {
 		}
 		return true;
 	}
-	
+	/**
+	 * Methode associee a la regle "Declaration Booleene".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
 	protected boolean estDeclarationBooleene() throws IOException{
 		//'faits_booleens' : mot clé
 		if(!estFaitBooleen()){	
@@ -45,7 +98,13 @@ public class Syntaxique {
 		}
 		return true;
 	}
-
+	/**
+	 * Methode associee a la regle "Declaration Symbolique".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
 	protected boolean estDeclarationSymbolique() throws IOException{
 		//faits_symboliques
 		if(!estFaitSymbolique()){
@@ -65,7 +124,13 @@ public class Syntaxique {
 		}
 		return true;
 	}
-	
+	/**
+	 * Methode associee a la regle "Declaration Entiere".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
 	protected boolean estDeclarationEntiere() throws IOException{
 		//faits_entiers
 		if(!estFaitEntier()){
@@ -85,7 +150,13 @@ public class Syntaxique {
 		}
 		return true;
 	}
-	
+	/**
+	 * Methode associee a la regle "Faits Booleens".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
 	protected boolean estFaitsBooleens() throws IOException{
 		//Fait_Booleen
 		if(!estFaitBooleen()){
@@ -102,7 +173,13 @@ public class Syntaxique {
 		}
 		return true;
 	}
-	
+	/**
+	 * Methode associee a la regle "Fait Booleen".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
 	protected boolean estFaitBooleen() throws IOException{
 		if(!estIdentificateur()){
 			return false;
@@ -293,11 +370,18 @@ public class Syntaxique {
 		}
 		return true;
 	}
-	
+	/**
+	 * Methode associee a la regle "ExpressionEntiere".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
 	protected boolean estExpressionEntiere() throws IOException{
 		
 		// [Additif]
 		if(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			// L'operateur est present : il faut passer au jeton suivant.
 			precharge = lexical.suivant();
 		}
 		// Terme
@@ -306,14 +390,22 @@ public class Syntaxique {
 		}
 		//{Additif Terme}
 		while(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			// Passe l'operateur
 			precharge = lexical.suivant();
 			if(!estTerme()){
 				return false;
 			}
 		}
+		// La regle expressionEntiere est satisfaite
 		return true;
 	}
-	
+	/**
+     * Methode associee a la regle "Terme".
+     *
+     * @return true si la regle est satisfaite sinon false.
+     * @throw IOException si l'analyseur lexical ne parvient pas a lire
+     *   l'expression.
+     */
 	protected boolean estTerme() throws IOException{
 		//Facteur
 		if(!estFacteur()){
@@ -321,32 +413,47 @@ public class Syntaxique {
 		}
 		//{Multiplicatif Facteur }
 		while(precharge.estOperateurMultiplie() || precharge.estOperateurDivise()){
+			// Passer l'operateur
 			precharge = lexical.suivant();
 			if(!estFacteur()){
 				return false;
 			}
 		}
+		//La regle est satisfaite
 		return true;
 	}
-	
+	 /**
+     * Methode associee a la regle "Facteur".
+     *
+     * @return true si la regle est satisfaite sinon false.
+     * @throw IOException si l'analyseur lexical ne parvient pas a lire
+     *   l'expression.
+     */
 	protected boolean estFacteur() throws IOException {
-		//Entier
-		if(precharge.estEntier()){
-			precharge = lexical.suivant();
-			return true;
+		// Le jeton precharge est un entier.
+		if (precharge.estEntier()) {
+		    // Passer l'entier.
+		    precharge = lexical.suivant();
+		    // La regle est satisfaite.
+		    return true;
 		}
+		
 		if(!precharge.estParentheseOuvrante()){
-			return false;
-		}
-		// (Expression)
-		precharge = lexical.suivant();
-		if(!estDeclaration()){
-			return false;
-		}
-		if(precharge.estParentheseFermante()){
+			// Passer la parenthese.
 			precharge = lexical.suivant();
-			return true;
+			// Appel de la methode associee a la regle "Declaration".
+			if(!estDeclaration()){
+				return false;
+			}
+			// Le jeton precharge doit etre une parenthese fermante.
+			if(precharge.estParentheseFermante()){
+				// Passer la parenthese fermante.
+				precharge = lexical.suivant();
+				//La regle est satisfaite.
+				return true;
+			}
 		}
+		// Le jeton est inconnu.
 		return false;
 	}
 	
