@@ -196,20 +196,56 @@ public class Syntaxique {
 	}
 	// Methodes liées aux regles :
 	protected boolean estRegles() throws IOException{
-			return false;
+		
+			//{ Regle ';' }
+			while (estRegle()){
+				precharge = lexical.suivant();
+				// il doit obligatoirement y avoir un point virgule derriere une Regle
+				if(!precharge.estPointVirgule()){
+					return false;
+				}
+			}
+			return true;
 	}
 	protected boolean estRegle() throws IOException{
-		return false;
+		if(!estRegleSansPremisse() && !estRegleAvecPremisses()){
+			return false;
+		}
+		return true;
 	}
+	
 	protected boolean estRegleSansPremisse() throws IOException{
-		return false;
+		if(!estConclusion()){
+			return false;
+		}
+		return true;
 	}
 	protected boolean estRegleAvecPremisses() throws IOException{
-		return false;
+		
+		//'si'
+		if(!precharge.estOperateurSi()){
+			return false;
+		}
+		//Condition
+		if(!estCondition()){
+			return false;
+		}
+		//'alors'
+		if(!precharge.estOperateurAlors()){
+			return false;
+		}
+		//Conclusion
+		if(!estConclusion()){
+			return false;
+		}
+		return true;
 	}
 	// Méthodes liées aux Conclusions
 	protected boolean estConclusion() throws IOException{
-		return false;
+		if(!estConclusionBooleene() && !estConclusionSymbolique() && !estConclusionEntiere()){
+			return false;
+		}
+		return true;
 	}
 	protected boolean estConclusionBooleene() throws IOException{
 		return false;
