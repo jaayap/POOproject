@@ -18,17 +18,17 @@ public class Jeton {
     	OperateurMoins,
     	OperateurMultiplie,
     	OperateurDivise,
-    	OperateurEgal,
     	Entier,
     	Underscore,
     	Non,
     	Si,
     	Alors,
-    	Inferieur,
-    	Superieur,
-    	InferieurOuEgal,
-    	SuperieurOuEgal,
-    	Different,//correspond a /= 
+    	ComparateurEgal,
+    	ComparateurInferieur,
+    	ComparateurSuperieur,
+    	ComparateurInferieurOuEgal,
+    	ComparateurSuperieurOuEgal,
+    	ComparateurDifferent,//correspond a /= 
     	Virgule,
     	PointVirgule,
     	Lettre,
@@ -120,8 +120,8 @@ public class Jeton {
     * @return true si ce jeton est associe a l'operateur d'egalite sinon 
     *   false.
     */
-   public boolean estOperateurEgal() {
-	   return type == Jeton.Type.OperateurEgal;
+   public boolean estComparateurEgal() {
+	   return type == Jeton.Type.ComparateurEgal;
    }
    /**
     * Indique si ce jeton est associe a un entier.
@@ -150,23 +150,23 @@ public class Jeton {
    }
    
    public boolean estComparateurInferieur() {
-	   return type == Jeton.Type.Inferieur;
+	   return type == Jeton.Type.ComparateurInferieur;
    }
    
    public boolean estComparateurSuperieur() {
-	   return type == Jeton.Type.Superieur;
+	   return type == Jeton.Type.ComparateurSuperieur;
    }
    
    public boolean estComparateurSuperieurOuEgal() {
-	   return type == Jeton.Type.InferieurOuEgal;
+	   return type == Jeton.Type.ComparateurInferieurOuEgal;
    }
    
    public boolean estComparateurInferieurOuEgal() {
-	   return type == Jeton.Type.SuperieurOuEgal;
+	   return type == Jeton.Type.ComparateurSuperieurOuEgal;
    }
    
    public boolean estComparateurDifferent() {
-	   return type == Jeton.Type.Different;
+	   return type == Jeton.Type.ComparateurDifferent;
    }
    public boolean estNon() {
 	   return type == Jeton.Type.Non;

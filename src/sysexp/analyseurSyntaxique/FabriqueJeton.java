@@ -210,7 +210,7 @@ class FabriqueJeton {
     /**
      * Jeton associe a l'operateur d'�galit�.
      */
-    protected static final Jeton operateurEgal = new Jeton(Jeton.Type.OperateurEgal, "=");
+    protected static final Jeton operateurEgal = new Jeton(Jeton.Type.ComparateurEgal, "=");
     
     
     /**

@@ -38,7 +38,7 @@ public class Syntaxique {
 		}
 	*/
 		//'='
-		if(!precharge.estOperateurEgal()){
+		if(!precharge.estComparateurEgal()){
 			return false;
 		}
 		//'Faits_Booleens' : liste de fait   _______________HashMap<Fait, listeFaits>
@@ -63,7 +63,7 @@ public class Syntaxique {
 			return false;
 		}
 		//'='
-		if(!precharge.estOperateurEgal()){
+		if(!precharge.estComparateurEgal()){
 			return false;
 		}
 		//Faits_Symboliques
@@ -84,10 +84,10 @@ public class Syntaxique {
 			return false;
 		}
 		//'='
-		if(!precharge.estOperateurEgal()){
+		if(!precharge.estComparateurEgal()){
 			return false;
 		}
-		// Faits_Entiers
+		// Faits_Entier
 		if(!estFaitsEntiers()){
 			return false;
 		}
@@ -248,13 +248,61 @@ public class Syntaxique {
 		return true;
 	}
 	protected boolean estConclusionBooleene() throws IOException{
-		return false;
+		
+		//Fait_booleen ou 'non' Fait_Booleen
+		while(!precharge.estNon()){
+			if(!estFaitBooleen()){
+				return false;
+			}
+		}
+		while(precharge.estNon()){
+			precharge = lexical.suivant();
+			if(!estFaitBooleen()){
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	protected boolean estConclusionSymbolique() throws IOException{
-		return false;
+		//Fait_symbolique
+		if(!estFaitSymbolique()){
+			return false;
+		}
+		//=
+		if(!precharge.estComparateurEgal()){
+			return false;
+		}
+		//Constante symbolique(=Identificateur) ou Fait_symbolique
+		if(!estIdentificateur() && !estFaitSymbolique()){
+			return false;
+		}
+		return true;
+	
 	}
 	protected boolean estConclusionEntiere() throws IOException{
-		return false;
+		//Fait_entier
+		if(!estFaitEntier()){
+			return false;
+		}
+		//Comparateur
+		if(!estComparateur()){
+			return false;
+		}
+		//Expression_Entiere
+		if(!estExpressionEntiere()){
+			return false;
+		}
+		return true;
+	}
+	protected boolean estComparateur() throws IOException{
+		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent() &&
+		   !precharge.estComparateurInferieur() && !precharge.estComparateurInferieurOuEgal() &&
+		   !precharge.estComparateurSuperieur() && !precharge.estComparateurSuperieurOuEgal()){
+			
+			return false;
+		}
+		return true;
 	}
 /*	protected boolean estConstanteSymbolique() throws IOException{
 		return false;
@@ -263,7 +311,23 @@ public class Syntaxique {
 		return false;
 	}*/
 	protected boolean estExpressionEntiere() throws IOException{
-		return false;
+		
+		// [Additif]
+		if(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			precharge = lexical.suivant();
+		}
+		// Terme
+		if(!estTerme()){
+			return false;
+		}
+		//{Additif Terme}
+		while(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			precharge = lexical.suivant();
+			if(!estTerme()){
+				return false;
+			}
+		}
+		return true;
 	}
 	protected boolean estTerme() throws IOException{
 		//Facteur
@@ -276,7 +340,6 @@ public class Syntaxique {
 			if(!estFacteur()){
 				return false;
 			}
-			
 		}
 		return true;
 	}
