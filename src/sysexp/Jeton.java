@@ -1,4 +1,4 @@
-package sysexp.analyseurSyntaxique;
+package sysexp;
 
 import exercice1.Jeton;
 

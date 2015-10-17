@@ -1,4 +1,4 @@
-package sysexp.analyseurSyntaxique;
+package sysexp;
 import java.io.IOException;
 
 public class Syntaxique {
@@ -13,17 +13,16 @@ public class Syntaxique {
 	public boolean verifier() throws IOException{
 		precharge = lexical.suivant();
 		return estDeclaration() && precharge.estFinExpression();
-		
 	}
 	
 	//méthodes liées aux Déclarations
+	
 	protected boolean estDeclaration() throws IOException{
 		
 		// est declaration_booleene ou declatation_symbolique ou declaration_entiere
 		if(!estDeclarationBooleene() || !estDeclarationSymbolique() || !estDeclarationEntiere()){
 			return false;
 		}
-	
 		return true;
 	}
 	
@@ -32,31 +31,21 @@ public class Syntaxique {
 		if(!estFaitBooleen()){	
 			return false;
 		}
-	/*'faits_booleens' est-il un jeton?
-	 * if(precharge.estFaitBooleen()){
-			precharge= lexical.suivant();
-		}
-	*/
 		//'='
 		if(!precharge.estComparateurEgal()){
 			return false;
 		}
 		//'Faits_Booleens' : liste de fait   _______________HashMap<Fait, listeFaits>
-		//if() precharge = lexical.suivant();
-		
 		if(!estFaitsBooleens()){
 			return false;
 		}
-	
 		// ';'
 		if(!precharge.estPointVirgule()){
 			return false;
 		}
 		return true;
-		
 	}
 
-	
 	protected boolean estDeclarationSymbolique() throws IOException{
 		//faits_symboliques
 		if(!estFaitSymbolique()){
@@ -70,14 +59,13 @@ public class Syntaxique {
 		if(!estFaitsSymboliques()){
 			return false;
 		}
-	
 		// ';'
 		if(!precharge.estPointVirgule()){
 			return false;
 		}
 		return true;
-		
 	}
+	
 	protected boolean estDeclarationEntiere() throws IOException{
 		//faits_entiers
 		if(!estFaitEntier()){
@@ -91,15 +79,13 @@ public class Syntaxique {
 		if(!estFaitsEntiers()){
 			return false;
 		}
-	
 		// ';'
 		if(!precharge.estPointVirgule()){
 			return false;
 		}
-		
 		return true;
-		
 	}
+	
 	protected boolean estFaitsBooleens() throws IOException{
 		//Fait_Booleen
 		if(!estFaitBooleen()){
@@ -124,6 +110,7 @@ public class Syntaxique {
 		return true;
 		
 	}
+	
 	protected boolean estFaitsSymboliques() throws IOException{
 		//Fait_Symbolique
 		if(!estFaitSymbolique()){
@@ -139,8 +126,8 @@ public class Syntaxique {
 			}
 		}
 		return true;
-		
 	}
+	
 	protected boolean estFaitSymbolique() throws IOException{
 		if(!estIdentificateur()){
 			return false;
@@ -148,6 +135,7 @@ public class Syntaxique {
 		return true;
 		
 	}
+	
 	protected boolean estFaitsEntiers() throws IOException{
 		//Fait_Entier
 		if(!estFaitEntier()){
@@ -163,23 +151,23 @@ public class Syntaxique {
 			}
 		}
 		return true;
-		
 	}
+	
 	protected boolean estFaitEntier() throws IOException{
 		if(!estIdentificateur()){
 			return false;
 		}
 		return true;
-		
 	}
+	
 	protected boolean estIdentificateur() throws IOException{
-		
 		//Le premier caractere doit etre une lettre
 		if(!estAlphanumerique()){
 			return false;
 		}
 		//{['_'] Alphanumerique }
 		while(precharge.estUnderscore()){
+			//On passe au suivant
 			precharge = lexical.suivant();
 			if(!estAlphanumerique()){
 				return false;
@@ -194,9 +182,9 @@ public class Syntaxique {
 		}
 		return true;
 	}
+	
 	// Methodes liées aux regles :
 	protected boolean estRegles() throws IOException{
-		
 			//{ Regle ';' }
 			while (estRegle()){
 				precharge = lexical.suivant();
@@ -207,6 +195,7 @@ public class Syntaxique {
 			}
 			return true;
 	}
+	
 	protected boolean estRegle() throws IOException{
 		if(!estRegleSansPremisse() && !estRegleAvecPremisses()){
 			return false;
@@ -220,8 +209,8 @@ public class Syntaxique {
 		}
 		return true;
 	}
+	
 	protected boolean estRegleAvecPremisses() throws IOException{
-		
 		//'si'
 		if(!precharge.estSi()){
 			return false;
@@ -240,6 +229,7 @@ public class Syntaxique {
 		}
 		return true;
 	}
+	
 	// Méthodes liées aux Conclusions
 	protected boolean estConclusion() throws IOException{
 		if(!estConclusionBooleene() && !estConclusionSymbolique() && !estConclusionEntiere()){
@@ -248,7 +238,6 @@ public class Syntaxique {
 		return true;
 	}
 	protected boolean estConclusionBooleene() throws IOException{
-		
 		//Fait_booleen ou 'non' Fait_Booleen
 		while(!precharge.estNon()){
 			if(!estFaitBooleen()){
@@ -261,7 +250,6 @@ public class Syntaxique {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 	protected boolean estConclusionSymbolique() throws IOException{
@@ -278,8 +266,8 @@ public class Syntaxique {
 			return false;
 		}
 		return true;
-	
 	}
+	
 	protected boolean estConclusionEntiere() throws IOException{
 		//Fait_entier
 		if(!estFaitEntier()){
@@ -296,21 +284,16 @@ public class Syntaxique {
 		return true;
 	}
 	
-	protected boolean estComparateur() throws IOException{
+	protected boolean estComparateur() throws IOException{//Pas super joli :
 		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent() &&
 		   !precharge.estComparateurInferieur() && !precharge.estComparateurInferieurOuEgal() &&
-		   !precharge.estComparateurSuperieur() && !precharge.estComparateurSuperieurOuEgal()){
-			
-			return false;
+		   !precharge.estComparateurSuperieur() && !precharge.estComparateurSuperieurOuEgal()
+		   ){
+			 return false;
 		}
 		return true;
 	}
-/*	protected boolean estConstanteSymbolique() throws IOException{
-		return false;
-	}*/
-/*	protected boolean estConstanteEntiere() throws IOException{
-		return false;
-	}*/
+	
 	protected boolean estExpressionEntiere() throws IOException{
 		
 		// [Additif]
@@ -330,6 +313,7 @@ public class Syntaxique {
 		}
 		return true;
 	}
+	
 	protected boolean estTerme() throws IOException{
 		//Facteur
 		if(!estFacteur()){
@@ -393,7 +377,6 @@ public class Syntaxique {
 		}
 		return true;
 	}
-	
 
 }//Fin de la classe Syntaxique
 

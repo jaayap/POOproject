@@ -1,4 +1,4 @@
-package sysexp.analyseurSyntaxique;
+package sysexp;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
