@@ -1,6 +1,5 @@
 package sysexp;
 
-import exercice1.Jeton;
 
 /**
  * Classe representant un jeton de la grammaire.
