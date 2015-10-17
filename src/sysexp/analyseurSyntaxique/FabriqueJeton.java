@@ -236,27 +236,27 @@ class FabriqueJeton {
     /**
      * Jeton associe au caractere <.
      */
-    protected static final Jeton inferieur = new Jeton(Jeton.Type.Inferieur, "<");
+    protected static final Jeton inferieur = new Jeton(Jeton.Type.ComparateurInferieur, "<");
     
     /**
      * Jeton associe au caractere >.
      */
-    protected static final Jeton superieur = new Jeton(Jeton.Type.Superieur, ">");
+    protected static final Jeton superieur = new Jeton(Jeton.Type.ComparateurSuperieur, ">");
     
     /**
      * Jeton associe au caractere <=.
      */
-    protected static final Jeton inferieurOuEgal = new Jeton(Jeton.Type.InferieurOuEgal, "<=");
+    protected static final Jeton inferieurOuEgal = new Jeton(Jeton.Type.ComparateurInferieurOuEgal, "<=");
     
     /**
      * Jeton associe au caractere >=.
      */
-    protected static final Jeton superieurOuEgal = new Jeton(Jeton.Type.SuperieurOuEgal, ">=");
+    protected static final Jeton superieurOuEgal = new Jeton(Jeton.Type.ComparateurSuperieurOuEgal, ">=");
     
     /**
      * Jeton associe au caractere /=.
      */
-    protected static final Jeton different = new Jeton(Jeton.Type.Different, "/=");
+    protected static final Jeton different = new Jeton(Jeton.Type.ComparateurDifferent, "/=");
     
     /**
      * Jeton assoie à la fin d'expression.
