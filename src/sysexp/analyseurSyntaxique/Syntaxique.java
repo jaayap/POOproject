@@ -15,6 +15,8 @@ public class Syntaxique {
 		return estDeclaration() && precharge.estFinExpression();
 		
 	}
+	
+	//méthodes liées aux Déclarations
 	protected boolean estDeclaration() throws IOException{
 		
 		// est declaration_booleene ou declatation_symbolique ou declaration_entiere
@@ -192,7 +194,41 @@ public class Syntaxique {
 		}
 		return true;
 	}
-
+	// Methodes liées aux regles :
+	protected boolean estRegles() throws IOException{
+			return false;
+	}
+	protected boolean estRegle() throws IOException{
+		return false;
+	}
+	protected boolean estRegleSansPremisse() throws IOException{
+		return false;
+	}
+	protected boolean estRegleAvecPremisses() throws IOException{
+		return false;
+	}
+	// Méthodes liées aux Conclusions
+	protected boolean estConclusion() throws IOException{
+		return false;
+	}
+	protected boolean estConclusionBooleene() throws IOException{
+		return false;
+	}
+	protected boolean estConclusionSymbolique() throws IOException{
+		return false;
+	}
+	protected boolean estConclusionEntiere() throws IOException{
+		return false;
+	}
+/*	protected boolean estConstanteSymbolique() throws IOException{
+		return false;
+	}*/
+/*	protected boolean estConstanteEntiere() throws IOException{
+		return false;
+	}*/
+	protected boolean estExpressionEntiere() throws IOException{
+		return false;
+	}
 	protected boolean estTerme() throws IOException{
 		//Facteur
 		if(!estFacteur()){
@@ -227,6 +263,19 @@ public class Syntaxique {
 			precharge = lexical.suivant();
 			return true;
 		}
+		return false;
+	}
+	// Methodes liées aux conditions
+	protected boolean estCondition() throws IOException{
+		return false;
+	}
+	protected boolean estPremisse() throws IOException{
+		return false;
+	}
+	protected boolean estPremisseBooleene() throws IOException{
+		return false;
+	}
+	protected boolean estPremisseSymbolique() throws IOException{
 		return false;
 	}
 	
