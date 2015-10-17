@@ -23,6 +23,7 @@ public class Jeton {
     	Non,
     	Si,
     	Alors,
+    	Et,
     	ComparateurEgal,
     	ComparateurInferieur,
     	ComparateurSuperieur,
@@ -141,12 +142,15 @@ public class Jeton {
 	   return type == Jeton.Type.Underscore;
    }
    
-   public boolean estOperateurSi() {
+   public boolean estSi() {
 	   return type == Jeton.Type.Si;
    }
    
-   public boolean estOperateurAlors() {
+   public boolean estAlors() {
 	   return type == Jeton.Type.Alors;
+   }
+   public boolean estEt() {
+	   return type == Jeton.Type.Et;
    }
    
    public boolean estComparateurInferieur() {

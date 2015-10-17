@@ -223,7 +223,7 @@ public class Syntaxique {
 	protected boolean estRegleAvecPremisses() throws IOException{
 		
 		//'si'
-		if(!precharge.estOperateurSi()){
+		if(!precharge.estSi()){
 			return false;
 		}
 		//Condition
@@ -231,7 +231,7 @@ public class Syntaxique {
 			return false;
 		}
 		//'alors'
-		if(!precharge.estOperateurAlors()){
+		if(!precharge.estAlors()){
 			return false;
 		}
 		//Conclusion
@@ -270,7 +270,7 @@ public class Syntaxique {
 			return false;
 		}
 		//=
-		if(!precharge.estComparateurEgal()){
+		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent()){
 			return false;
 		}
 		//Constante symbolique(=Identificateur) ou Fait_symbolique
@@ -295,6 +295,7 @@ public class Syntaxique {
 		}
 		return true;
 	}
+	
 	protected boolean estComparateur() throws IOException{
 		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent() &&
 		   !precharge.estComparateurInferieur() && !precharge.estComparateurInferieurOuEgal() &&
@@ -364,18 +365,33 @@ public class Syntaxique {
 		}
 		return false;
 	}
+	
 	// Methodes liées aux conditions
 	protected boolean estCondition() throws IOException{
-		return false;
+		//Premisse
+		if(!estPremisse()){
+			return false;
+		}
+		//{ et Premisse }
+		while(precharge.estEt()){
+			precharge = lexical.suivant();
+			if(!estPremisse()){
+				return false;
+			}
+		}
+		return true;
 	}
+	
 	protected boolean estPremisse() throws IOException{
-		return false;
-	}
-	protected boolean estPremisseBooleene() throws IOException{
-		return false;
-	}
-	protected boolean estPremisseSymbolique() throws IOException{
-		return false;
+		//Au niveau Semantique :
+		//PremisseBooleene = ConclusionBooleene
+		//PremisseSymbolique = ConclusionSymbolique
+		//PremisseEntiere = ConclusionEntiere
+		// Syntaxiquement on peut donc faire appel a ces methodes :
+		if(!estConclusionBooleene() || !estConclusionSymbolique() || !estConclusionEntiere()){
+			return false;
+		}
+		return true;
 	}
 	
 
