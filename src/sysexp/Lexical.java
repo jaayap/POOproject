@@ -75,7 +75,27 @@ public class Lexical {
 		char caractere = ligne.charAt(position);
 		// Il faut identifier le jeton.
 		switch(caractere) {   
-		 
+		
+		/*
+		Le souci c'est qu'on test qu'un caractere.
+		case :'/=': // Comparateur Different.
+		    position ++;
+		    return FabriqueJeton.comparateurDifferent();
+		    
+		    on ne peut donc pas rajouter une condition dans le case si simplement
+		    
+		    
+		    ce qu'il faut faire c'est case : '/'
+		    		if caractere suivant egal '='
+		    			alors jeton différents
+		    			
+		    pour faire sa, tu va surement avoir besoin d'utiliser des substrings pour recuperer des caracteres
+		    apres la position
+		    
+		    Il faut tester TOUS les jetons qu'on a definit !
+		    
+		    bon courage :)
+	*/
 			case '(': // Parenthese ouvrante.
 			    position ++;
 			    return FabriqueJeton.parentheseOuvrante();
@@ -103,13 +123,7 @@ public class Lexical {
 			case '=': // Comparateur Egal
 			    position ++;
 			    return FabriqueJeton.comparateurEgal();
-		/*
-			
-			case '/=': // Comparateur Different.
-			    position ++;
-			    return FabriqueJeton.comparateurDifferent();
-			    
-		*/
+		
 			    
 		default: // Chiffre ou bien representation inconnue.
 			if (Character.isDigit(caractere)) {
