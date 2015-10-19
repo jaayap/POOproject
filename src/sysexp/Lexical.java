@@ -76,7 +76,7 @@ public class Lexical {
 		// Il faut identifier le jeton.
 		switch(caractere) {   
 		
-		/*
+/*
 		Le souci c'est qu'on test qu'un caractere.
 		case :'/=': // Comparateur Different.
 		    position ++;
@@ -95,7 +95,7 @@ public class Lexical {
 		    Il faut tester TOUS les jetons qu'on a definit !
 		    
 		    bon courage :)
-	*/
+		    */
 			case '(': // Parenthese ouvrante.
 			    position ++;
 			    return FabriqueJeton.parentheseOuvrante();
