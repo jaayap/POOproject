@@ -69,8 +69,8 @@ class FabriqueJeton {
      *
      * @return le jeton associe a l'operateur d'egalite.
      */
-    public static Jeton operateurEgal() {
-    	return operateurEgal;
+    public static Jeton comparateurEgal() {
+    	return comparateurEgal;
     }
     
     /**
@@ -115,6 +115,14 @@ class FabriqueJeton {
      */
     public static Jeton alors() {
     	return alors;
+    }
+    /**
+     * Retourne le jeton associe à 'et'.
+     *
+     * @return le jeton associe à 'et'.
+     */
+    public static Jeton et() {
+    	return et;
     }
     /**
      * Retourne le jeton associe à '<'.
@@ -210,7 +218,7 @@ class FabriqueJeton {
     /**
      * Jeton associe a l'operateur d'�galit�.
      */
-    protected static final Jeton operateurEgal = new Jeton(Jeton.Type.ComparateurEgal, "=");
+    protected static final Jeton comparateurEgal = new Jeton(Jeton.Type.ComparateurEgal, "=");
     
     
     /**
@@ -232,6 +240,11 @@ class FabriqueJeton {
      * Jeton associe a la chaine 'alors
      */
     protected static final Jeton alors = new Jeton(Jeton.Type.Alors, "alors");
+    
+    /**
+     * Jeton associe a la chaine 'et
+     */
+    protected static final Jeton et = new Jeton(Jeton.Type.Et, "et");
    
     /**
      * Jeton associe au caractere <.
