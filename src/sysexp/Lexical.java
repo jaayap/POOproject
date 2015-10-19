@@ -73,9 +73,12 @@ public class Lexical {
 		}
 		// Caractere correspondant a la position courante.
 		char caractere = ligne.charAt(position);
+		//String utilisée pour les tests suivants sur des chaînes de caractere
+		String suite="";
 		// Il faut identifier le jeton.
 		switch(caractere) {   
 		
+<<<<<<< HEAD
 /*
 		Le souci c'est qu'on test qu'un caractere.
 		case :'/=': // Comparateur Different.
@@ -96,6 +99,9 @@ public class Lexical {
 		    
 		    bon courage :)
 		    */
+=======
+
+>>>>>>> origin/master
 			case '(': // Parenthese ouvrante.
 			    position ++;
 			    return FabriqueJeton.parentheseOuvrante();
@@ -118,11 +124,66 @@ public class Lexical {
 	
 			case '/': // Operateur de division.
 			    position ++;
+			    caractere=ligne.charAt(position);
+			    if (caractere=='=') {
+			    	position ++;
+			    	return FabriqueJeton.different();		    		
+			    }
 			    return FabriqueJeton.operateurDivise();
 			 
 			case '=': // Comparateur Egal
 			    position ++;
 			    return FabriqueJeton.comparateurEgal();
+			    
+			case '<': // Comparateur Inferieur a
+			    position ++;
+			    caractere=ligne.charAt(position);
+			    if (caractere=='=') {
+			    	position ++;
+			    	return FabriqueJeton.inferieurOuEgal();
+			    }
+			    return FabriqueJeton.inferieur();
+			    
+			case '>': // Comparateur Superieur a
+			    position ++;
+			    caractere=ligne.charAt(position);
+			    if (caractere=='=') {
+			    	position ++;
+			    	return FabriqueJeton.superieurOuEgal();
+			    }
+			    return FabriqueJeton.superieur();
+			    
+			case 'n': // Lettre n (jeton non)
+				position ++;
+				suite=ligne.substring(position, position+3);
+				if (suite=="on "){
+					position=position+3;
+					return FabriqueJeton.non();
+				}
+				
+			case 's': // Lettre s (jeton si)
+				position ++;
+				suite=ligne.substring(position, position+2);
+				if (suite=="i "){
+					position=position+2;
+					return FabriqueJeton.si();
+				}
+				
+			case 'a': // Lettre a (jeton alors)
+				position ++;
+				suite=ligne.substring(position, position+5);
+				if (suite=="lors "){
+					position=position+5;
+					return FabriqueJeton.alors();
+				}
+				
+			case 'e': // Lettre e (jeton et)
+				position ++;
+				suite=ligne.substring(position, position+2);
+				if (suite=="t "){
+					position=position+2;
+					return FabriqueJeton.et();
+				}
 		
 			    
 		default: // Chiffre ou bien representation inconnue.
