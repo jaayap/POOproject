@@ -81,14 +81,14 @@ public class Syntaxique {
      */
 	protected boolean estDeclarationBooleene() throws IOException{
 		//'faits_booleens' : mot clé
-		if(!estFaitBooleen()){	
+		if(!precharge.estFaits_Booleens()){	
 			return false;
 		}
 		//'='
 		if(!precharge.estComparateurEgal()){
 			return false;
 		}
-		//'Faits_Booleens' : liste de fait   _______________HashMap<Fait, listeFaits>
+		//'Faits_Booleens' : liste de faits   _______________HashMap<Fait, listeFaits>
 		if(!estFaitsBooleens()){
 			return false;
 		}
@@ -106,8 +106,8 @@ public class Syntaxique {
 	   l'expression.
      */
 	protected boolean estDeclarationSymbolique() throws IOException{
-		//faits_symboliques
-		if(!estFaitSymbolique()){
+		// 'faits_symboliques'  : mot clé
+		if(!precharge.estFaits_Symboliques()){
 			return false;
 		}
 		//'='
@@ -132,8 +132,8 @@ public class Syntaxique {
 	   l'expression.
      */
 	protected boolean estDeclarationEntiere() throws IOException{
-		//faits_entiers
-		if(!estFaitEntier()){
+		// 'faits_entiers' : mot clé
+		if(!precharge.estFaits_Entiers()){
 			return false;
 		}
 		//'='

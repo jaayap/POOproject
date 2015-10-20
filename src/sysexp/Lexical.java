@@ -73,12 +73,14 @@ public class Lexical {
 		}
 		// Caractere correspondant a la position courante.
 		char caractere = ligne.charAt(position);
-		//String utilisée pour les tests suivants sur des chaînes de caractere
+		//String utilisï¿½e pour les tests suivants sur des chaï¿½nes de caractere
 		String suite="";
+		String suite_bool="";
+		String suite_synt = "";
+		String suite_ent ="";
 		// Il faut identifier le jeton.
 		switch(caractere) {   
 		
-<<<<<<< HEAD
 /*
 		Le souci c'est qu'on test qu'un caractere.
 		case :'/=': // Comparateur Different.
@@ -99,9 +101,6 @@ public class Lexical {
 		    
 		    bon courage :)
 		    */
-=======
-
->>>>>>> origin/master
 			case '(': // Parenthese ouvrante.
 			    position ++;
 			    return FabriqueJeton.parentheseOuvrante();
@@ -184,7 +183,25 @@ public class Lexical {
 					position=position+2;
 					return FabriqueJeton.et();
 				}
-		
+			
+			case 'f' : // Lettre f
+				position ++;
+				suite_bool=ligne.substring(position, position+14);
+				if (suite_bool=="aits_booleens "){
+					position=position+13;
+					return FabriqueJeton.faitsBooleens();
+				}
+				suite_synt = ligne.substring(position, position+16);
+				if (suite=="aits_syntaxiques "){
+					position=position+16;
+					return FabriqueJeton.faitsSymboliques();
+				}
+				suite_ent = ligne.substring(position, position+13);
+				if (suite=="aits_entiers "){
+					position=position+13;
+					return FabriqueJeton.faitsEntiers();
+				}
+				
 			    
 		default: // Chiffre ou bien representation inconnue.
 			if (Character.isDigit(caractere)) {

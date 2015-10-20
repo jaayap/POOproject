@@ -10,6 +10,33 @@ package sysexp;
  */
 class FabriqueJeton {
 
+	 /**
+     * Retourne le jeton associe a la parenthese ouvrante.
+     *
+     * @return le jeton associe a la parenthese ouvrante.
+     */
+    public static Jeton faitsBooleens() {
+	return faits_booleens;
+    }
+
+    /**
+     * Retourne le jeton associe a la parenthese ouvrante.
+     *
+     * @return le jeton associe a la parenthese ouvrante.
+     */
+    public static Jeton faitsSymboliques() {
+	return faits_symboliques;
+    }
+
+    /**
+     * Retourne le jeton associe a la parenthese ouvrante.
+     *
+     * @return le jeton associe a la parenthese ouvrante.
+     */
+    public static Jeton faitsEntiers() {
+	return faits_entiers;
+    }
+
     /**
      * Retourne le jeton associe a la parenthese ouvrante.
      *
@@ -185,6 +212,18 @@ class FabriqueJeton {
     public static Jeton finExpression() {
     	return finExpression;
     }
+    /**
+     * Jeton associe aux faits booleens.
+     */
+    protected static final Jeton faits_booleens = new Jeton(Jeton.Type.faits_booleens, "faits_booleens");
+    /**
+     * Jeton associe aux faits symboliques.
+     */
+    protected static final Jeton faits_symboliques = new Jeton(Jeton.Type.faits_symboliques, "faits_symboliques");
+    /**
+     * Jeton associe aux faits entiers.
+     */
+    protected static final Jeton faits_entiers = new Jeton(Jeton.Type.faits_entiers, "faits_entiers");
     /**
      * Jeton associe a la parenthese ouvrante.
      */

@@ -11,6 +11,9 @@ public class Jeton {
      * jetons.
      */
     public enum Type {
+    	faits_booleens,
+    	faits_symboliques,
+    	faits_entiers,
     	ParentheseOuvrante,
     	ParentheseFermante,
     	OperateurPlus,
@@ -53,7 +56,33 @@ public class Jeton {
    public String lireRepresentation() {
 	   return representation;
    }
-   
+   /**
+    * Indique si ce jeton est associe a la chaine de caractere 'faits_booleens'.
+    *
+    * @return true si ce jeton est associe a la parenthese ouvrante sinon 
+    *   false.
+    */
+   public boolean estFaits_Booleens() {
+	return type == Jeton.Type.faits_booleens;
+   }
+   /**
+    * Indique si ce jeton est associe a la chaine de caractere 'fait_symbolique'
+    *
+    * @return true si ce jeton est associe a la parenthese ouvrante sinon 
+    *   false.
+    */
+   public boolean estFaits_Symboliques() {
+	return type == Jeton.Type.faits_symboliques;
+   }
+   /**
+    * Indique si ce jeton est associe a la chaine de caractere 'fait_entier'.
+    *
+    * @return true si ce jeton est associe a la parenthese ouvrante sinon 
+    *   false.
+    */
+   public boolean estFaits_Entiers() {
+	return type == Jeton.Type.faits_entiers;
+   }
    /**
     * Indique si ce jeton est associe a la parenthese ouvrante.
     *
