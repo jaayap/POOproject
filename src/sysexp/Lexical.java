@@ -163,7 +163,7 @@ public class Lexical {
 					return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
 				}
 				
-			case 's': // Lettre s (jeton si)
+			case 's': // Lettre s (jeton si) 
 				position ++;
 				suite=ligne.substring(position, position+2);
 				System.out.println(suite+".");
