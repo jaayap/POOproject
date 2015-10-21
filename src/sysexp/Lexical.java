@@ -156,49 +156,62 @@ public class Lexical {
 				position ++;
 				suite=ligne.substring(position, position+3);
 				if (suite=="on "){
-					position=position+3;
+					position=position+2;
 					return FabriqueJeton.non();
+				}
+				else{
+					return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
 				}
 				
 			case 's': // Lettre s (jeton si)
 				position ++;
 				suite=ligne.substring(position, position+2);
+				System.out.println(suite+".");
 				if (suite=="i "){
-					position=position+2;
+					position=position+1;
 					return FabriqueJeton.si();
+				}
+				else{
+					return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
 				}
 				
 			case 'a': // Lettre a (jeton alors)
 				position ++;
 				suite=ligne.substring(position, position+5);
 				if (suite=="lors "){
-					position=position+5;
+					position=position+4;
 					return FabriqueJeton.alors();
+				}
+				else{
+					return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
 				}
 				
 			case 'e': // Lettre e (jeton et)
 				position ++;
 				suite=ligne.substring(position, position+2);
 				if (suite=="t "){
-					position=position+2;
+					position=position+1;
 					return FabriqueJeton.et();
+				}
+				else{
+					return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
 				}
 			
 			case 'f' : // Lettre f
 				position ++;
-				suite_bool=ligne.substring(position, position+14);
+				suite_bool=ligne.substring(position, position+15);
 				if (suite_bool=="aits_booleens "){
-					position=position+13;
+					position=position+12;
 					return FabriqueJeton.faitsBooleens();
 				}
-				suite_synt = ligne.substring(position, position+16);
+				suite_synt = ligne.substring(position, position+17);
 				if (suite=="aits_syntaxiques "){
-					position=position+16;
+					position=position+15;
 					return FabriqueJeton.faitsSymboliques();
 				}
-				suite_ent = ligne.substring(position, position+13);
+				suite_ent = ligne.substring(position, position+14);
 				if (suite=="aits_entiers "){
-					position=position+13;
+					position=position+12;
 					return FabriqueJeton.faitsEntiers();
 				}
 				
