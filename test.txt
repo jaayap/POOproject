@@ -1,3 +1,19 @@
+faits_booleens = avoir_fait_prison , habite_chateau , intelligent , fort ,
+riche , grand , lourd , malhonnete , parents_riches , pauvre , travailleur ,
+chercheur , thesard , leger ;
+
+
+faits_symboliques=profession ;
+faits_entiers =fortune , fortune_parents , poids , taille , travail_par_jour ,
+combien ;
+
+chercheur ;
+non the sard ;
+profession = medecin ;
+poids = (-46 + 95) ;
+fortune_parents =
+(1000/10 * (25 + 80) / 3 + 50 * (12 - 5) + 14000 / 2) - 1000 ;
+
 
 si malhonnete et fort alors riche ;
 si parents_riches et intelligent alors riche ;
@@ -17,19 +33,3 @@ si poids < 50 alors leger ;
 si poids < 50 alors fortune = (2 * fortune_parents ) - 1 ;
 si fortune_parents > 10000 alors parents_riches ;
 si travail_par_jour > 8 alors travailleur ;
-
-faits_booleens = avoir_fait_prison , habite_chateau , intelligent , fort ,
-riche , grand , lourd , malhonnete , parents_riches , pauvre , travailleur ,
-chercheur , thesard , leger ;
-
-
-faits_symboliques=profession ;
-faits_entiers =fortune , fortune_parents , poids , taille , travail_par_jour ,
-combien ;
-
-chercheur ;
-non the sard ;
-profession = medecin ;
-poids = (-46 + 95) ;
-fortune_parents =
-(1000/10 * (25 + 80) / 3 + 50 * (12 - 5) + 14000 / 2) - 1000 ;

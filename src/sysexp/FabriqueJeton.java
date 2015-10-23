@@ -193,6 +193,24 @@ class FabriqueJeton {
     public static Jeton different() {
     	return different;
     }
+    
+    /**
+     * Retourne le jeton associe à ','.
+     *
+     * @return le jeton associe à ','.
+     */
+    public static Jeton virgule() {
+    	return virgule;
+    }
+    
+    /**
+     * Retourne le jeton associe à ';'.
+     *
+     * @return le jeton associe à ';'.
+     */
+    public static Jeton pointVirgule() {
+    	return pointVirgule;
+    }
 
 	/**
      * Retourne le jeton associe a une representation inconnue.
@@ -309,6 +327,17 @@ class FabriqueJeton {
      * Jeton associe au caractere /=.
      */
     protected static final Jeton different = new Jeton(Jeton.Type.ComparateurDifferent, "/=");
+    
+    /**
+     * Jeton associe au caractere ,.
+     */
+    protected static final Jeton virgule = new Jeton(Jeton.Type.Virgule, ",");
+    
+    /**
+     * Jeton associe au caractere ;.
+     */
+    protected static final Jeton pointVirgule = new Jeton(Jeton.Type.PointVirgule, ";");
+    
     
     /**
      * Jeton assoie à la fin d'expression.
