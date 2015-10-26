@@ -24,7 +24,7 @@ public class Syntaxique {
 	public Syntaxique(Lexical lexical){
 		this.lexical = lexical;
 	}
-	 
+	
 	/**
      * Accesseur.
      *
@@ -48,7 +48,7 @@ public class Syntaxique {
 		// Appel de la methode associee a la regle "Declaration".
 		// Appel de la methode associee a la regle "Regle".
 		while(!precharge.estFinExpression()){
-			if (!estRegles()) {
+			if (!estDeclaration() && !estRegles()) {
 					 return false;
 			}
 		}
@@ -160,7 +160,7 @@ public class Syntaxique {
 		}else{
 			return false;
 		}
-		// Faits_Entier
+		// Faits_Entiers
 		if(!estFaitsEntiers()){
 			return false;
 		}
@@ -315,6 +315,10 @@ public class Syntaxique {
 	
 	protected boolean estRegleSansPremisse() throws IOException{
 		System.out.println("regle sans premisse \n");
+		if(precharge.estSi()){
+			System.out.println("precharge = 'SI' sans premisse =faux\n");
+			return false;
+		}
 		if(estConclusion()){
 			System.out.println("une conclusion / est regle sans premisse true\n");
 			return true;
@@ -324,9 +328,10 @@ public class Syntaxique {
 	}
 	
 	protected boolean estRegleAvecPremisses() throws IOException{
-		System.out.println("regle avec premisse  FAUX\n");
+		System.out.println("regle avec premisse \n");
 		//'si'
-	/*	if(precharge.estSi()){
+		if(precharge.estSi()){
+			System.out.println(" precharge = SI\n");
 			precharge = lexical.suivant();
 		}
 		else{
@@ -334,21 +339,24 @@ public class Syntaxique {
 		}
 		//Condition
 		if(!estCondition()){
+			System.out.println("RETURN FALSE pas de condition\n");
 			return false;
 		}
 		//'alors'
 		if(precharge.estAlors()){
+			System.out.println(" precharge = ALORS\n");
 			precharge = lexical.suivant();
 		}
 		else{
+			System.out.println(" precharge /= ALORS\n");
 			return false;
 		}
 		//Conclusion
 		if(!estConclusion()){
 			return false;
 		}
-		return true;*/
-		return false;
+		return true;
+		
 	}
 	
 	// Méthodes liées aux Conclusions
@@ -538,7 +546,9 @@ public class Syntaxique {
 		if(!estPremisse()){
 			return false;
 		}
-		//{ et Premisse }
+		//{ et Premisse } // FAUX DANS 'fortune > 10000 ' car c'est une conclusion entiere
+		//					la premisse est égal a fortune seulement :/
+		//					PAS de souci avec les profession = medecin
 		while(precharge.estEt()){
 			precharge = lexical.suivant();
 			if(!estPremisse()){
@@ -554,9 +564,11 @@ public class Syntaxique {
 		//PremisseSymbolique = ConclusionSymbolique
 		//PremisseEntiere = ConclusionEntiere
 		//Syntaxiquement on peut donc faire appel a ces methodes :
-		if(!estConclusionBooleene() || !estConclusionSymbolique() || !estConclusionEntiere()){
+		if(!estConclusionBooleene() && !estConclusionSymbolique() && !estConclusionEntiere()){
+			System.out.println("RETURN FALSE estPremisse\n");
 			return false;
 		}
+		System.out.println("RETURN TRUE estPremisse\n");
 		return true;
 	}
 
