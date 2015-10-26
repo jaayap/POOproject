@@ -44,12 +44,14 @@ public class Syntaxique {
 	public boolean verifier() throws IOException{
 		// Pre-chargement du premier jeton.
 		precharge = lexical.suivant();
-		
+	
 		// Appel de la methode associee a la regle "Declaration".
-		if (! estDeclaration()) {
-		    return false;
+		// Appel de la methode associee a la regle "Regle".
+		while(!precharge.estFinExpression()){
+			if (!estDeclaration()) {
+					 return false;
+			}
 		}
-		
 		// Il faut verifier que nous avons atteint la fin du texte.
 		return precharge.estFinExpression();
 
@@ -67,10 +69,10 @@ public class Syntaxique {
 	protected boolean estDeclaration() throws IOException{
 		
 		// est declaration_booleene ou declatation_symbolique ou declaration_entiere
-		if(!estDeclarationBooleene() || !estDeclarationSymbolique() || !estDeclarationEntiere()){
-			return false;
+		if(estDeclarationBooleene() || estDeclarationSymbolique() || estDeclarationEntiere()){
+			return true;
 		}
-		return true;
+		return false;
 	}
 	/**
 	 * Methode associee a la regle "Declaration Booleene".
@@ -80,14 +82,20 @@ public class Syntaxique {
 	   l'expression.
      */
 	protected boolean estDeclarationBooleene() throws IOException{
+
 		//'faits_booleens' : mot clé
 		if(precharge.estFaits_Booleens()){	
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		//'='
 		if(precharge.estComparateurEgal()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
+		
 		//'Faits_Booleens' : liste de faits   _______________HashMap<Fait, listeFaits>
 		if(!estFaitsBooleens()){
 			return false;
@@ -95,6 +103,8 @@ public class Syntaxique {
 		// ';'
 		if(precharge.estPointVirgule()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		return true;
 	}
@@ -109,10 +119,14 @@ public class Syntaxique {
 		// 'faits_symboliques'  : mot clé
 		if(precharge.estFaits_Symboliques()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		//'='
 		if(precharge.estComparateurEgal()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		//Faits_Symboliques
 		if(!estFaitsSymboliques()){
@@ -121,6 +135,8 @@ public class Syntaxique {
 		// ';'
 		if(precharge.estPointVirgule()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		return true;
 	}
@@ -135,10 +151,14 @@ public class Syntaxique {
 		// 'faits_entiers' : mot clé
 		if(precharge.estFaits_Entiers()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		//'='
 		if(precharge.estComparateurEgal()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		// Faits_Entier
 		if(!estFaitsEntiers()){
@@ -147,6 +167,8 @@ public class Syntaxique {
 		// ';'
 		if(precharge.estPointVirgule()){
 			precharge = lexical.suivant();
+		}else{
+			return false;
 		}
 		return true;
 	}
@@ -289,17 +311,18 @@ public class Syntaxique {
 	}
 	
 	protected boolean estRegleAvecPremisses() throws IOException{
+		System.out.println("coucou \n");
 		//'si'
-		if(!precharge.estSi()){
-			return false;
+		if(precharge.estSi()){
+			precharge = lexical.suivant();
 		}
 		//Condition
 		if(!estCondition()){
 			return false;
 		}
 		//'alors'
-		if(!precharge.estAlors()){
-			return false;
+		if(precharge.estAlors()){
+			precharge = lexical.suivant();
 		}
 		//Conclusion
 		if(!estConclusion()){
@@ -479,7 +502,7 @@ public class Syntaxique {
 		//PremisseBooleene = ConclusionBooleene
 		//PremisseSymbolique = ConclusionSymbolique
 		//PremisseEntiere = ConclusionEntiere
-		// Syntaxiquement on peut donc faire appel a ces methodes :
+		//Syntaxiquement on peut donc faire appel a ces methodes :
 		if(!estConclusionBooleene() || !estConclusionSymbolique() || !estConclusionEntiere()){
 			return false;
 		}
