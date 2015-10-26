@@ -8,7 +8,7 @@ faits_entiers =fortune , fortune_parents , poids , taille , travail_par_jour ,
 combien ;
 
 chercheur ;
-non the sard ;
+non thesard ;
 profession = medecin ;
 poids = (-46 + 95) ;
 fortune_parents =

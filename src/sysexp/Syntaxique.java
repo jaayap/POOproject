@@ -81,20 +81,20 @@ public class Syntaxique {
      */
 	protected boolean estDeclarationBooleene() throws IOException{
 		//'faits_booleens' : mot clé
-		if(!precharge.estFaits_Booleens()){	
-			return false;
+		if(precharge.estFaits_Booleens()){	
+			precharge = lexical.suivant();
 		}
 		//'='
-		if(!precharge.estComparateurEgal()){
-			return false;
+		if(precharge.estComparateurEgal()){
+			precharge = lexical.suivant();
 		}
 		//'Faits_Booleens' : liste de faits   _______________HashMap<Fait, listeFaits>
 		if(!estFaitsBooleens()){
 			return false;
 		}
 		// ';'
-		if(!precharge.estPointVirgule()){
-			return false;
+		if(precharge.estPointVirgule()){
+			precharge = lexical.suivant();
 		}
 		return true;
 	}
@@ -107,20 +107,20 @@ public class Syntaxique {
      */
 	protected boolean estDeclarationSymbolique() throws IOException{
 		// 'faits_symboliques'  : mot clé
-		if(!precharge.estFaits_Symboliques()){
-			return false;
+		if(precharge.estFaits_Symboliques()){
+			precharge = lexical.suivant();
 		}
 		//'='
-		if(!precharge.estComparateurEgal()){
-			return false;
+		if(precharge.estComparateurEgal()){
+			precharge = lexical.suivant();
 		}
 		//Faits_Symboliques
 		if(!estFaitsSymboliques()){
 			return false;
 		}
 		// ';'
-		if(!precharge.estPointVirgule()){
-			return false;
+		if(precharge.estPointVirgule()){
+			precharge = lexical.suivant();
 		}
 		return true;
 	}
@@ -133,20 +133,20 @@ public class Syntaxique {
      */
 	protected boolean estDeclarationEntiere() throws IOException{
 		// 'faits_entiers' : mot clé
-		if(!precharge.estFaits_Entiers()){
-			return false;
+		if(precharge.estFaits_Entiers()){
+			precharge = lexical.suivant();
 		}
 		//'='
-		if(!precharge.estComparateurEgal()){
-			return false;
+		if(precharge.estComparateurEgal()){
+			precharge = lexical.suivant();
 		}
 		// Faits_Entier
 		if(!estFaitsEntiers()){
 			return false;
 		}
 		// ';'
-		if(!precharge.estPointVirgule()){
-			return false;
+		if(precharge.estPointVirgule()){
+			precharge = lexical.suivant();
 		}
 		return true;
 	}
@@ -239,22 +239,23 @@ public class Syntaxique {
 	
 	protected boolean estIdentificateur() throws IOException{
 		//Le premier caractere doit etre une lettre
-		if(!estAlphanumerique()){
-			return false;
+		while(estAlphanumerique()){
+			precharge = lexical.suivant();
 		}
 		//{['_'] Alphanumerique }
 		while(precharge.estUnderscore()){
 			//On passe au suivant
 			precharge = lexical.suivant();
-			if(!estAlphanumerique()){
-				return false;
-			}
+			
+				while(estAlphanumerique()){
+					precharge = lexical.suivant();
+				}
 		}
 		return true;
 	}
 	
 	protected boolean estAlphanumerique() throws IOException{
-		if(!precharge.estEntier() || !precharge.estLettre()){
+		if(!precharge.estEntier() && !precharge.estLettre() && !precharge.estInconnu()){
 			return false;
 		}
 		return true;
