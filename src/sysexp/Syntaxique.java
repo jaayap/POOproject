@@ -48,7 +48,7 @@ public class Syntaxique {
 		// Appel de la methode associee a la regle "Declaration".
 		// Appel de la methode associee a la regle "Regle".
 		while(!precharge.estFinExpression()){
-			if (!estDeclaration()) {
+			if (!estRegles()) {
 					 return false;
 			}
 		}
@@ -283,38 +283,54 @@ public class Syntaxique {
 		return true;
 	}
 	
-	// Methodes liées aux regles :
+	// Methodes liées aux regles :---------------------------------------------
 	protected boolean estRegles() throws IOException{
 			//{ Regle ';' }
 			while (estRegle()){
-				precharge = lexical.suivant();
+				System.out.println(" c'est une regle \n");
+				//precharge = lexical.suivant();
 				// il doit obligatoirement y avoir un point virgule derriere une Regle
-				if(!precharge.estPointVirgule()){
+				if(precharge.estPointVirgule()){
+					precharge = lexical.suivant();
+					System.out.println("point virgule, fin d'une regle");
+				//	return true;
+				}else{
+					System.out.println("erreur point virgule manquant \n");
 					return false;
 				}
 			}
-			return true;
+			System.out.println("c'est pas une regle\n");
+			return false;
 	}
 	
 	protected boolean estRegle() throws IOException{
-		if(!estRegleSansPremisse() && !estRegleAvecPremisses()){
-			return false;
+		System.out.println("estRegle\n");
+		if(estRegleSansPremisse() || estRegleAvecPremisses()){
+			System.out.println("estRegle = true \n");
+			return true;
 		}
-		return true;
+		System.out.println("regle FALSE \n");
+		return false;
 	}
 	
 	protected boolean estRegleSansPremisse() throws IOException{
-		if(!estConclusion()){
-			return false;
+		System.out.println("regle sans premisse \n");
+		if(estConclusion()){
+			System.out.println("une conclusion / est regle sans premisse true\n");
+			return true;
 		}
-		return true;
+		System.out.println("regle sans premisse FAUX \n");
+		return false;
 	}
 	
 	protected boolean estRegleAvecPremisses() throws IOException{
-		System.out.println("coucou \n");
+		System.out.println("regle avec premisse  FAUX\n");
 		//'si'
-		if(precharge.estSi()){
+	/*	if(precharge.estSi()){
 			precharge = lexical.suivant();
+		}
+		else{
+			return false;
 		}
 		//Condition
 		if(!estCondition()){
@@ -324,58 +340,93 @@ public class Syntaxique {
 		if(precharge.estAlors()){
 			precharge = lexical.suivant();
 		}
+		else{
+			return false;
+		}
 		//Conclusion
 		if(!estConclusion()){
 			return false;
 		}
-		return true;
+		return true;*/
+		return false;
 	}
 	
 	// Méthodes liées aux Conclusions
 	protected boolean estConclusion() throws IOException{
-		if(!estConclusionBooleene() && !estConclusionSymbolique() && !estConclusionEntiere()){
-			return false;
+		System.out.println("estConclusion \n");
+		if(estConclusionBooleene() || estConclusionSymbolique() || estConclusionEntiere()){
+			System.out.println("conclusion correct \n");
+			return true;
 		}
-		return true;
+		return false;
 	}
 	protected boolean estConclusionBooleene() throws IOException{
+		System.out.println("estConclusionBooleene \n");
 		//Fait_booleen ou 'non' Fait_Booleen
-		while(!precharge.estNon()){
-			if(!estFaitBooleen()){
+		//while(!precharge.estNon()){
+	
+		if(!precharge.estNon()  && !estFaitBooleen()){
+			System.out.println("RETURN FALSE Ni fait booleen ni jeton 'non' \n");
+			return false;
+		}
+		if(estFaitBooleen()){
+			System.out.println("FAIT_BOOLEEN\n");
+			//On verifie qu'il ny a pas de egal derriere car si il y a un signe egal derriere 
+			//c'est une conclusion symbolique ou entiere 
+			//On retourne donc faux
+			if(precharge.estComparateurEgal()){
+				System.out.println("RETURN FALSE precharge '='\n");
 				return false;
 			}
 		}
 		while(precharge.estNon()){
+			System.out.println("Non quelquechose\n");
 			precharge = lexical.suivant();
 			if(!estFaitBooleen()){
 				return false;
 			}
+			if(precharge.estComparateurEgal()){
+				System.out.println("RETURN FALSE precharge '='\n");
+				return false;
+			}
 		}
+	
 		return true;
 	}
+	
 	protected boolean estConclusionSymbolique() throws IOException{
+		System.out.println("estConclusionSymbolique");
 		//Fait_symbolique
 		if(!estFaitSymbolique()){
+			System.out.println("je trouve pas le fait symbolique\n");
 			return false;
 		}
-		//=
-		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent()){
+		// '=' ou '/='
+		if(precharge.estComparateurEgal() || precharge.estComparateurDifferent()){
+			System.out.println("je suis déja ici au signe égal\n");
+			precharge = lexical.suivant();
+		}else{
 			return false;
 		}
 		//Constante symbolique(=Identificateur) ou Fait_symbolique
-		if(!estIdentificateur() && !estFaitSymbolique()){
+		if(!estIdentificateur() || !estFaitSymbolique()){
+			System.out.println("NON IDENTIFICATEUR\n");
 			return false;
 		}
 		return true;
 	}
 	
 	protected boolean estConclusionEntiere() throws IOException{
+		System.out.println("conclusion Entiere");
 		//Fait_entier
 		if(!estFaitEntier()){
 			return false;
 		}
 		//Comparateur
-		if(!estComparateur()){
+		if(estComparateur()){
+			precharge = lexical.suivant();
+		}
+		else{
 			return false;
 		}
 		//Expression_Entiere

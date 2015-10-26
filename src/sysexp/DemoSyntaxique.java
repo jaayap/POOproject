@@ -54,6 +54,8 @@ class DemoSyntaxique {
             if (syntaxique.verifier()) {
                 System.out.println("Expression correcte.");
                 return;
+            }else{
+            	System.out.println("expression incorrect");
             }
 
             // L'expression est incorrecte : il faut afficher ce qui pose
