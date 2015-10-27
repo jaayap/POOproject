@@ -25,7 +25,7 @@ public class Syntaxique {
 		// Appel de la methode associee a la regle "Regle".
 		while (!precharge.estFinExpression()) {// Tant que l'on a pas atteint la
 												// fin du fichiers
-			if (!estDeclaration()) {
+			if (!estRegles()) {
 				return false;
 			}
 		}
@@ -52,16 +52,13 @@ public class Syntaxique {
 	protected boolean estDeclarationBooleene() throws IOException {
 
 		// 'faits_booleens' : mot clé
-		if (precharge.estFaits_Booleens()) { // On test si c'est bien le jeton
-												// 'fait_booleen'
+		if (precharge.estFaits_Booleens()) { // On test si c'est bien le jeton 'fait_booleen'
 			precharge = lexical.suivant();// Oui, on passe a la suite
 		} else {
-			return false; // Non, on signal que ce n'est pas une déclaration
-							// booleene
+			return false; // Non, on signal que ce n'est pas une déclaration booleene
 		}
 		// '='
-		if (precharge.estComparateurEgal()) {// Ensuite ce doit être le signe
-												// égal
+		if (precharge.estComparateurEgal()) {// Ensuite ce doit être le signe égal
 			precharge = lexical.suivant();// Oui, on passe a la suite
 		} else {
 			return false;
@@ -72,8 +69,7 @@ public class Syntaxique {
 			return false;
 		}
 		// ';'
-		if (precharge.estPointVirgule()) {// la déclaration doit être terminée
-											// par un point virgule
+		if (precharge.estPointVirgule()) {// la déclaration doit être terminée par un point virgule
 			precharge = lexical.suivant();
 		} else {
 			return false;
@@ -81,13 +77,10 @@ public class Syntaxique {
 		return true;
 	}
 	
-	protected boolean estFaitsBooleens() throws IOException {// Test si l'on a
-																// bien une
-																// liste de fait
-																// booleen
+	protected boolean estFaitsBooleens() throws IOException {// Test si l'on a bien une
+																// liste de faits booleens
 		// Fait_Booleen
-		if (!estIdentificateur()) {// Le premier doit etre un fait booleen soit
-								// d'un Identificateur
+		if (!estIdentificateur()) {// Le premier doit etre un fait booleen soit un Identificateur
 			return false;
 		}
 		// { ',' Fait_Booleen }
@@ -213,6 +206,71 @@ public class Syntaxique {
 			return true;
 		}
 		return false;
+	}
+//-----------------------------------------------------------------------------------------------------------------
+	//LES REGLES :
+	protected boolean estRegles() throws IOException{ // On regarde s'il y a une liste de regles
+		//{ Regle ';' }
+	
+		//{ Regle ';' }
+		while (estRegle()){
+			//precharge = lexical.suivant();
+			// il doit obligatoirement y avoir un point virgule derriere une Regle
+			if(!precharge.estPointVirgule()){
+				return false;
+			}else{
+				precharge = lexical.suivant();
+			}
+		}
+		return true;
+}
+	protected boolean estRegle() throws IOException{
+		if(estConclusionBooleene()){//IL existe 2 types de regles 
+			return true;
+		}
+		return false;
+	}
+	protected boolean estRegleSansPremisse() throws IOException{
+		//Une regle sans prémisse ne possède qu'une conclusion
+		if(estConclusion()){
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean estConclusion() throws IOException{
+		if(estConclusionBooleene()){// 3 type de conclusion
+			return true;
+		}
+		return false;
+	}
+	protected boolean estConclusionBooleene() throws IOException{
+		//Fait_booleen ou 'non' Fait_Booleen
+		//while(!precharge.estNon()){
+	
+		if(!precharge.estNon() && !estIdentificateur()){//Doit commencer par non ou fait_booleen
+			return false;	
+		}
+	
+		while(precharge.estNon()){
+			precharge = lexical.suivant();
+			System.out.println(precharge.lireRepresentation()+"coucou");
+			if(!estIdentificateur()){
+				System.out.println(precharge.lireRepresentation()+"coucou 2");
+				return false;
+			}
+		}
+		return true;
+	}
+	//Petite methode sympa, pour aller plus vite
+	protected boolean estComparateur() throws IOException{//Pas super joli :
+		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent() &&
+		   !precharge.estComparateurInferieur() && !precharge.estComparateurInferieurOuEgal() &&
+		   !precharge.estComparateurSuperieur() && !precharge.estComparateurSuperieurOuEgal()
+		   ){
+			 return false;
+		}
+		return true;
 	}
 }
 
