@@ -179,11 +179,11 @@ public class Syntaxique {
 	}
 	protected boolean estIdentificateur() throws IOException {
 		// Le premier caractere doit etre une lettre
-		if (!estAlphanumerique()) {
+		if (!estLettre()) { //jeton = lettre
 			return false;
 		}
 		// On continue de parcourrir le mot :
-		while (estAlphanumerique()) {
+		while (estLettre()) {
 			precharge = lexical.suivant();
 		}
 		// {['_'] Alphanumerique }
@@ -207,25 +207,42 @@ public class Syntaxique {
 		}
 		return false;
 	}
+	protected boolean estLettre() throws IOException {
+		// ! A MODIFIER : ESTINCONNU() a enlevé
+		// JETON LETTRE A RAJOUTER
+		if (precharge.estLettre()|| precharge.estInconnu()) {
+			// precharge = lexical.suivant();
+			return true;
+		}
+		return false;
+	}
 //-----------------------------------------------------------------------------------------------------------------
 	//LES REGLES :
 	protected boolean estRegles() throws IOException{ // On regarde s'il y a une liste de regles
 		//{ Regle ';' }
-	
-		//{ Regle ';' }
-		while (estRegle()){
-			//precharge = lexical.suivant();
-			// il doit obligatoirement y avoir un point virgule derriere une Regle
-			if(!precharge.estPointVirgule()){
-				return false;
-			}else{
+		// 0, 1, ou plusieurs regles
+		//une regle doit se finir par un point virgule meme si c'est une regle 'vide'
+		if(!estRegle()){ // 0
+			if(precharge.estPointVirgule()){
 				precharge = lexical.suivant();
+			}else{
+				return false;
+			}
+		}
+		//Tant que c'est une regle elle se finit par un point virgule
+		while (estRegle()){ // une ou plusieurs
+			// il doit obligatoirement y avoir un point virgule derriere une Regle
+			if(precharge.estPointVirgule()){
+				precharge = lexical.suivant();
+			}else{
+				
+				return false;
 			}
 		}
 		return true;
 }
 	protected boolean estRegle() throws IOException{
-		if(estConclusionBooleene()){//IL existe 2 types de regles 
+		if(estRegleSansPremisse()){//IL existe 2 types de regles 
 			return true;
 		}
 		return false;
@@ -246,19 +263,36 @@ public class Syntaxique {
 	}
 	protected boolean estConclusionBooleene() throws IOException{
 		//Fait_booleen ou 'non' Fait_Booleen
-		//while(!precharge.estNon()){
-	
 		if(!precharge.estNon() && !estIdentificateur()){//Doit commencer par non ou fait_booleen
 			return false;	
 		}
 	
 		while(precharge.estNon()){
 			precharge = lexical.suivant();
-			System.out.println(precharge.lireRepresentation()+"coucou");
 			if(!estIdentificateur()){
-				System.out.println(precharge.lireRepresentation()+"coucou 2");
 				return false;
 			}
+		}
+		if(precharge.estComparateurEgal()){
+			return false;
+		}
+		return true;
+	}
+	protected boolean estConclusionSymbolique() throws IOException{
+		System.out.println(precharge.lireRepresentation()+"coucou 2");
+		//Fait_symbolique soit un identificateur
+		if(!estIdentificateur()){
+			return false;
+		}
+		// '=' ou '/='
+		if(precharge.estComparateurEgal() || precharge.estComparateurDifferent()){
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		//Constante symbolique(=Identificateur) ou Fait_symbolique(=Identificateur)
+		if(!estIdentificateur()){
+			return false;
 		}
 		return true;
 	}
