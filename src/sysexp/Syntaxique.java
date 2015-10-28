@@ -25,7 +25,7 @@ public class Syntaxique {
 		// Appel de la methode associee a la regle "Regle".
 		while (!precharge.estFinExpression()) {// Tant que l'on a pas atteint la
 												// fin du fichiers
-			if (!estRegles()) {
+			if (!estDeclaration() && !estRegles()) {
 				return false;
 			}
 		}
@@ -242,7 +242,7 @@ public class Syntaxique {
 		return true;
 }
 	protected boolean estRegle() throws IOException{
-		if(estRegleSansPremisse()){//IL existe 2 types de regles 
+		if(estRegleSansPremisse() || estRegleAvecPremisses()){//IL existe 2 types de regles 
 			return true;
 		}
 		return false;
@@ -254,12 +254,40 @@ public class Syntaxique {
 		}
 		return false;
 	}
-	
+	protected boolean estRegleAvecPremisses() throws IOException{
+		//'si'
+		if(precharge.estSi()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		//Condition
+		if(!estCondition()){
+			return false;
+		}
+		//'alors'
+		if(precharge.estAlors()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		//Conclusion
+		if(!estConclusion()){
+			return false;
+		}
+		return true;
+		
+	}
 	protected boolean estConclusion() throws IOException{
 		// si precharge = non, on sais que c'est soit une conclusion booleene soit rien
 		if(precharge.estNon()){
 			if(!estConclusionBooleene()){
 				return false;
+			}
+			else{
+				return true;
 			}
 		}
 		
@@ -268,9 +296,16 @@ public class Syntaxique {
 			return false;
 		}
 		
-		if(precharge.estComparateurEgal()){
+		if(precharge.estComparateurEgal() || precharge.estComparateurDifferent()){
 			precharge = lexical.suivant();
 			if(!estConclusionSymbolique() && !estConclusionEntiere()){
+				return false;
+			}
+		}
+			
+		if(estComparateur()){
+			precharge = lexical.suivant(); 
+			if(!estConclusionEntiere()){
 				return false;
 			}
 		}
@@ -306,8 +341,8 @@ public class Syntaxique {
 			precharge = lexical.suivant();
 		}else{
 			return false;
-		}*/
-		
+		}
+		*/
 		//Constante symbolique(=Identificateur) ou Fait_symbolique(=Identificateur)
 		if(!estIdentificateur()){
 			return false;
@@ -322,7 +357,9 @@ public class Syntaxique {
 		
 		//Comparateur
 		if(estComparateur()){
+			System.out.println("estComparateur?"+precharge.lireRepresentation());
 			precharge = lexical.suivant();
+			System.out.println("estComparateur?"+precharge.lireRepresentation());
 		}
 		else{
 			return false;
@@ -333,7 +370,8 @@ public class Syntaxique {
 		}
 		return true;
 	}
-protected boolean estExpressionEntiere() throws IOException{
+	
+	protected boolean estExpressionEntiere() throws IOException{
 		
 		// [Additif]
 		if(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
@@ -398,7 +436,8 @@ protected boolean estExpressionEntiere() throws IOException{
 			// Passer la parenthese.
 			precharge = lexical.suivant();
 			// Appel de la methode associee a la regle "Declaration".
-			if(!estExpressionEntiere()){
+			if(!estExpressionEntiere() && !estIdentificateur()){//Rajout de est identificateur pour le cas : 
+																//fortune = (2 * fortune_parents ) - 1
 				return false;
 			}
 			// Le jeton precharge doit etre une parenthese fermante.
@@ -408,10 +447,111 @@ protected boolean estExpressionEntiere() throws IOException{
 				//La regle est satisfaite.
 				return true;
 			}
+			else{
+				return false;
+			}
 		}
 		// Le jeton est inconnu.
 		return false;
 	}
+	protected boolean estCondition() throws IOException{
+		
+		//Premisse
+		if(!estPremisse()){
+			return false;
+		}
+		
+		//{ et Premisse } // FAUX DANS 'fortune > 10000 ' car c'est une conclusion entiere
+		//					la premisse est égal a fortune seulement :/
+		//					PAS de souci avec les profession = medecin
+		while(precharge.estEt()){
+			precharge = lexical.suivant();
+			if(!estPremisse()){
+				return false;
+			}
+		}
+		return true;
+		/*if(!estPremisse()){
+			return false;
+		}
+		if(estConditionComparaisonEntiere() || estConditionSymboliqueOuBooleene()){
+			return true;
+		}
+		return false;*/
+	}
+	protected boolean estConditionSymboliqueOuBooleene() throws IOException{
+	
+		//{ et Premisse } // FAUX DANS 'fortune > 10000 ' car c'est une conclusion entiere
+		//					la premisse est égal a fortune seulement :/
+		//					PAS de souci avec les profession = medecin
+		if(!precharge.estEt()){
+			return false;
+		}
+		while(precharge.estEt()){
+			precharge = lexical.suivant();
+			if(!estPremisse()){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	protected boolean estConditionComparaisonEntiere() throws IOException{
+		//{ et Premisse } // FAUX DANS 'fortune > 10000 ' car c'est une conclusion entiere
+		//					la premisse est égal a fortune seulement :/
+		//					PAS de souci avec les profession = medecin
+		
+		if(estComparateur()){
+			precharge = lexical.suivant();
+			if(!estExpressionEntiere()){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}else{
+			return false;
+		}
+
+	}
+	protected boolean estConditionComparaisonFaits() throws IOException{
+		//{ et Premisse } // FAUX DANS 'fortune > 10000 ' car c'est une conclusion entiere
+		//					la premisse est égal a fortune seulement :/
+		//					PAS de souci avec les profession = medecin
+		
+		if(estComparateur()){
+			precharge = lexical.suivant();
+			
+			if(!precharge.estEntier()){
+				return false;
+			}
+			else{
+				precharge = lexical.suivant();
+				return true;
+			}
+		}else{
+			return false;
+		}
+
+	}
+	protected boolean estPremisse() throws IOException{
+		//Au niveau Semantique :
+		//PremisseBooleene = ConclusionBooleene
+		//PremisseSymbolique = ConclusionSymbolique
+		//PremisseEntiere = ConclusionEntiere
+		//Syntaxiquement on peut donc faire appel a ces methodes :
+		/*if(!estConclusionBooleene() && !estConclusionSymbolique() && !estConclusionEntiere()){
+			System.out.println(precharge.lireRepresentation()+"premisse false?");
+			
+			return false;
+		}*/
+		//On peut donc plutot faire 
+		if(!estConclusion()){
+			return false;
+		}
+		return true;
+	}
+
 	//Petite methode sympa, pour aller plus vite
 	protected boolean estComparateur() throws IOException{//Pas super joli :
 		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent() &&
@@ -422,5 +562,6 @@ protected boolean estExpressionEntiere() throws IOException{
 		}
 		return true;
 	}
+	
 }
 
