@@ -1,10 +1,11 @@
 package sysexp.modele;
-/*
- * fait : classe ou interface? a verifier
+/**
+ * Doit  permettre de consulter le nom du fait
+ * Downcast
+ * @author Jasmine
+ *
  */
-public class Fait {
-	protected String name;
-	protected String type;
-	
+public interface Fait {
+
 	
 }

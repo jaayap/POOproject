@@ -1,5 +1,5 @@
 package sysexp.modele;
 
-public class Regle {
+public interface Regle {
 
 }
