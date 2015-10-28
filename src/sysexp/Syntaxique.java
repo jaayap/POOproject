@@ -256,17 +256,35 @@ public class Syntaxique {
 	}
 	
 	protected boolean estConclusion() throws IOException{
-		if(estConclusionBooleene()){// 3 type de conclusion
+		// si precharge = non, on sais que c'est soit une conclusion booleene soit rien
+		if(precharge.estNon()){
+			if(!estConclusionBooleene()){
+				return false;
+			}
+		}
+		
+		//	Une conclusion commence toujours par un identificateur
+		if(!estIdentificateur()){
+			return false;
+		}
+		
+		if(precharge.estComparateurEgal()){
+			precharge = lexical.suivant();
+			if(!estConclusionSymbolique() && !estConclusionEntiere()){
+				return false;
+			}
+		}
+		return true;
+		/*if(estConclusionBooleene() || estConclusionSymbolique()){// 3 type de conclusion
 			return true;
 		}
-		return false;
+		return false;*/
 	}
 	protected boolean estConclusionBooleene() throws IOException{
 		//Fait_booleen ou 'non' Fait_Booleen
 		if(!precharge.estNon() && !estIdentificateur()){//Doit commencer par non ou fait_booleen
 			return false;	
 		}
-	
 		while(precharge.estNon()){
 			precharge = lexical.suivant();
 			if(!estIdentificateur()){
@@ -279,9 +297,8 @@ public class Syntaxique {
 		return true;
 	}
 	protected boolean estConclusionSymbolique() throws IOException{
-		System.out.println(precharge.lireRepresentation()+"coucou 2");
 		//Fait_symbolique soit un identificateur
-		if(!estIdentificateur()){
+	/*	if(!estIdentificateur()){
 			return false;
 		}
 		// '=' ou '/='
@@ -289,12 +306,111 @@ public class Syntaxique {
 			precharge = lexical.suivant();
 		}else{
 			return false;
-		}
+		}*/
+		
 		//Constante symbolique(=Identificateur) ou Fait_symbolique(=Identificateur)
 		if(!estIdentificateur()){
 			return false;
 		}
 		return true;
+	}
+	protected boolean estConclusionEntiere() throws IOException{
+		//Fait_entier
+	/*	if(!estFaitEntier()){
+			return false;
+		}
+		
+		//Comparateur
+		if(estComparateur()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}*/
+		//Expression_Entiere
+		if(!estExpressionEntiere()){
+			return false;
+		}
+		return true;
+	}
+protected boolean estExpressionEntiere() throws IOException{
+		
+		// [Additif]
+		if(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			// L'operateur est present : il faut passer au jeton suivant.
+			precharge = lexical.suivant();
+		}
+		// Terme
+		if(!estTerme()){
+			return false;
+		}
+		//{Additif Terme}
+		while(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			// Passe l'operateur
+			precharge = lexical.suivant();
+			if(!estTerme()){
+				return false;
+			}
+		}
+		// La regle expressionEntiere est satisfaite
+		return true;
+	}
+	/**
+     * Methode associee a la regle "Terme".
+     *
+     * @return true si la regle est satisfaite sinon false.
+     * @throw IOException si l'analyseur lexical ne parvient pas a lire
+     *   l'expression.
+     */
+	protected boolean estTerme() throws IOException{
+		//Facteur
+		if(!estFacteur()){
+			return false;
+		}
+		//{Multiplicatif Facteur }
+		while(precharge.estOperateurMultiplie() || precharge.estOperateurDivise()){
+			// Passer l'operateur
+			precharge = lexical.suivant();
+			if(!estFacteur()){
+				return false;
+			}
+		}
+		//La regle est satisfaite
+		return true;
+	}
+	 /**
+     * Methode associee a la regle "Facteur".
+     *
+     * @return true si la regle est satisfaite sinon false.
+     * @throw IOException si l'analyseur lexical ne parvient pas a lire
+     *   l'expression.
+     */
+	protected boolean estFacteur() throws IOException {
+		// Le jeton precharge est un entier.
+		if (precharge.estEntier()) {
+		    // Passer l'entier.
+		    precharge = lexical.suivant();
+		    // La regle est satisfaite.
+		    return true;
+		}
+		
+		if(precharge.estParentheseOuvrante()){
+			// Passer la parenthese.
+			precharge = lexical.suivant();
+			// Appel de la methode associee a la regle "Declaration".
+			if(!estExpressionEntiere()){
+				return false;
+			}
+			// Le jeton precharge doit etre une parenthese fermante.
+			if(precharge.estParentheseFermante()){
+				// Passer la parenthese fermante.
+				precharge = lexical.suivant();
+				//La regle est satisfaite.
+				return true;
+			}
+		}
+		// Le jeton est inconnu.
+		return false;
 	}
 	//Petite methode sympa, pour aller plus vite
 	protected boolean estComparateur() throws IOException{//Pas super joli :
