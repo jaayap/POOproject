@@ -19,7 +19,7 @@ public class Syntaxique_old {
 	 /**
      * Constructeur logique.
      *
-     * @param lecteur la valeur de {@link Syntaxique#lexical}.
+     * @param lecteur la valeur de {@link Syntaxique_test#lexical}.
      */
 	public Syntaxique_old(Lexical lexical){
 		this.lexical = lexical;
@@ -28,7 +28,7 @@ public class Syntaxique_old {
 	/**
      * Accesseur.
      *
-     * @return la valeur de {@link Syntaxique#lexical}.
+     * @return la valeur de {@link Syntaxique_test#lexical}.
      */
     public Lexical lireLexical() {
 	return lexical;

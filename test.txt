@@ -4,6 +4,6 @@ chercheur , thesard , leger ;
 
 faits_symboliques=profession ;
 
-faits_entiers =fortune , fortune_parents , poids , taille , travail_par_jour ,
+faits_entiers = fortune_157 , fortune_parents , poids , taille , travail_par_jour ,
 combien ;
 
