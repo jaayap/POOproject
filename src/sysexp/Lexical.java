@@ -150,9 +150,9 @@ public class Lexical {
 			}
 			return FabriqueJeton.superieur();
 			
-		case '_': // Caractere underscore
-			position++;
-			return FabriqueJeton.underscore();
+		//case '_': // Caractere underscore
+			//position++;
+			//return FabriqueJeton.underscore();
 
 		case 'n': // Lettre n (jeton non)
 			position++;
@@ -163,8 +163,8 @@ public class Lexical {
 				return FabriqueJeton.non();
 			}
 			}
-			return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
-		
+			//return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
+			return extraireFait(position-1);
 
 		case 's': // Lettre s (jeton si)
 			position++;
@@ -175,8 +175,9 @@ public class Lexical {
 				return FabriqueJeton.si();
 			}
 			}
-			return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
-
+			//return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
+			return extraireFait(position-1);
+			
 		case 'a': // Lettre a (jeton alors)
 			position++;
 			if (ligne.length()>=position+5){
@@ -186,8 +187,9 @@ public class Lexical {
 				return FabriqueJeton.alors();
 			}
 			}
-			return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
-
+			//return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
+			return extraireFait(position-1);
+			
 		case 'e': // Lettre e (jeton et)
 			position++;
 			if (ligne.length()>=position+2){
@@ -197,8 +199,8 @@ public class Lexical {
 				return FabriqueJeton.et();
 			}
 			}
-			return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
-			
+			//return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
+			return extraireFait(position-1);
 			
 
 		case 'f': // Lettre f
@@ -224,7 +226,8 @@ public class Lexical {
 					}
 				}
 			}
-			return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
+			//return FabriqueJeton.inconnu(ligne.substring(position - 1, position));
+			return extraireFait(position-1);
 			
 		case ',': // Caractere virgule
 			position++;
@@ -237,6 +240,9 @@ public class Lexical {
 		default: // Chiffre ou bien representation inconnue.
 			if (Character.isDigit(caractere)) {
 				return extraireEntier();
+			}
+			if(Character.isLetter(caractere)){
+				return extraireFait(position);
 			}
 			// C'est la representation inconnue.
 			position++;
@@ -306,4 +312,31 @@ public class Lexical {
 		return FabriqueJeton.entier(ligne.substring(debut, fin));
 
 	}
+	protected Jeton extraireFait(int debut) {
+
+		// Nous nous placons juste derriere la position courante.
+		int fin = position + 1;
+
+		// Nous avons dans la ligne jusqu'a en attendre la fin ou bien tomber
+		// sur un caractere qui n'est plus un chiffre.
+		while (fin < ligne.length() && Character.isLetterOrDigit(ligne.charAt(fin)) || ligne.charAt(fin) == '_') {
+			fin++;
+		}
+		/*if(ligne.charAt(fin) == '_'){
+			System.out.println("YOUPIIIIIIIIIIIIIIIIIIIIIIIII");
+		}
+		System.out.println(ligne.charAt(fin));
+		*/
+		// Memorisation de la position du premier caractere dans la ligne.
+		//int debut = position;
+
+		// Positionnement sur le premier caractere situe derriere le dernier
+		// caractere de la chaine.
+		position = fin;
+
+		// Extraction.
+		return FabriqueJeton.fait(ligne.substring(debut, fin));
+
+	}
+	
 }

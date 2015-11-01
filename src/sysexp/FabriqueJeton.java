@@ -1,7 +1,5 @@
 package sysexp;
 
-
-
 /**
  * Classe representant une fabrique de jetons de la grammaire. 
  *
@@ -9,33 +7,33 @@ package sysexp;
  *   l'exterieur du paquetage.
  */
 class FabriqueJeton {
-
 	 /**
-     * Retourne le jeton associe a la parenthese ouvrante.
+     * Retourne le jeton associe a la "faits booleens".
      *
-     * @return le jeton associe a la parenthese ouvrante.
+     * @return le jeton associe a la"faits booleens".
      */
     public static Jeton faitsBooleens() {
 	return faits_booleens;
     }
 
     /**
-     * Retourne le jeton associe a la parenthese ouvrante.
+     * Retourne le jeton associe a "faits symboliques".
      *
-     * @return le jeton associe a la parenthese ouvrante.
+     * @return le jeton associe a "faits symboliques".
      */
     public static Jeton faitsSymboliques() {
 	return faits_symboliques;
     }
 
     /**
-     * Retourne le jeton associe a la parenthese ouvrante.
+     * Retourne le jeton associe a "faits entiers".
      *
-     * @return le jeton associe a la parenthese ouvrante.
+     * @return le jeton associe a "faits_entiers".
      */
     public static Jeton faitsEntiers() {
 	return faits_entiers;
     }
+    
 
     /**
      * Retourne le jeton associe a la parenthese ouvrante.
@@ -109,7 +107,17 @@ class FabriqueJeton {
     public static Jeton entier(String representation) {
     	return new Jeton(Jeton.Type.Entier, representation);
     }
-
+    
+    /**
+     * Retourne le jeton associe a un fait.
+     *
+     * @param representation la representation d'un fait
+     * @return le jeton associe a un fait.
+     */
+    public static Jeton fait(String representation) {
+    	return new Jeton(Jeton.Type.fait, representation);
+    }
+    
     /**
      * Retourne le jeton associe au caractere '_' .
      *
@@ -242,6 +250,9 @@ class FabriqueJeton {
      * Jeton associe aux faits entiers.
      */
     protected static final Jeton faits_entiers = new Jeton(Jeton.Type.faits_entiers, "faits_entiers");
+
+    
+  
     /**
      * Jeton associe a la parenthese ouvrante.
      */
@@ -337,7 +348,6 @@ class FabriqueJeton {
      * Jeton associe au caractere ;.
      */
     protected static final Jeton pointVirgule = new Jeton(Jeton.Type.PointVirgule, ";");
-    
     
     /**
      * Jeton assoie à la fin d'expression.

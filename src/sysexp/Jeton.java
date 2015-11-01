@@ -14,6 +14,7 @@ public class Jeton {
     	faits_booleens,
     	faits_symboliques,
     	faits_entiers,
+    	fait,
     	ParentheseOuvrante,
     	ParentheseFermante,
     	OperateurPlus,
@@ -82,6 +83,16 @@ public class Jeton {
     */
    public boolean estFaits_Entiers() {
 	return type == Jeton.Type.faits_entiers;
+   }
+   
+   /**
+    * Indique si ce jeton est associe a un fait.
+    *
+    * @return true si ce jeton est associe a la parenthese ouvrante sinon 
+    *   false.
+    */
+   public boolean estFait() {
+	return type == Jeton.Type.fait;
    }
    /**
     * Indique si ce jeton est associe a la parenthese ouvrante.
@@ -237,8 +248,6 @@ public class Jeton {
 	this.type = type;
 	this.representation = representation;
 	    }
-	    
-	   
 
 	    /**
 	     * Type de ce jeton.
@@ -249,7 +258,4 @@ public class Jeton {
 	     * Representation de ce jeton sous forme d'une chaine de caractere.
 	     */
 	    protected final String representation;
-
-	
-	    
 }
