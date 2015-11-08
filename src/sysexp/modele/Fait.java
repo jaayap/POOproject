@@ -1,11 +1,12 @@
 package sysexp.modele;
 /**
  * Doit  permettre de consulter le nom du fait
- * Downcast
+ * et le type : Downcast
  * @author Jasmine
  *
  */
 public interface Fait {
 
+	public String getNomFait();
 	
 }
