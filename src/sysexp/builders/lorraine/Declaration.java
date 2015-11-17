@@ -5,35 +5,16 @@ import java.util.HashMap;
 
 import sysexp.Jeton;
 import sysexp.Lexical;
-import sysexp.builders.Builder;
 import sysexp.modele.Fait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
-import sysexp.modele.Regle;
 
-/**
- * Cette classe represente le ConcreteBuilder
- * Cette classe doit assurer l'analyse Syntaxique ET sémantique de la base de règles
- * Ainsi que la construction de la base de règles
- * @author Jasmine
- *
- */
-public class Lorraine implements Builder{
+public class Declaration {
 	protected Lexical lexical;
 	protected Jeton precharge;
 	protected HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
-	protected HashMap<String, Regle> baseDeRegles = new HashMap<String, Regle>();
 	
-	/**
-	 * Doit fabriquer la base de regles en UN SEUL PAS.
-	 * Methode identique a vérifier dans syntaxique ?
-	 */
-	@Override
-	public void buildPart() {
-		// TODO 
-		
-	}
 	protected boolean estDeclaration() throws IOException {
 		// C'est une déclaration si c'est
 		// une declaration_booleene ou une declatation_symbolique ou une
@@ -44,9 +25,8 @@ public class Lorraine implements Builder{
 		// Sinon ce n'est pas une déclaration
 		return false;
 	}
-
 	protected boolean estDeclarationBooleene() throws IOException {
-
+		
 		// 'faits_booleens' : mot clé
 		if (precharge.estFaits_Booleens()) { // On test si c'est bien le jeton 'faits_booleens'
 			precharge = lexical.suivant();// Oui, on passe a la suite
@@ -195,24 +175,5 @@ public class Lorraine implements Builder{
 			}
 		}
 		return true;
-	}
-
-	/*public BaseDeRegles getResult(){
-		
-		return null;
-		
-	}*/
-	/**
-	 * retourne la base de faits
-	 */
-	public HashMap<String,Fait> getBaseDeFaits(){
-		return baseDeFaits;
-	}
-	/**
-	 * 
-	 * @return Le produit fini soit la base de regles
-	 */
-	public HashMap<String, Regle> getBaseDeRegles(){
-		return baseDeRegles;
 	}
 }
