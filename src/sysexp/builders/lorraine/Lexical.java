@@ -1,4 +1,4 @@
-package sysexp;
+package sysexp.builders.lorraine;
 
 import java.io.IOException;
 import java.io.LineNumberReader;

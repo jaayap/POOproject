@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import sysexp.builders.lorraine.Lexical;
+
 /**
  * Classe representant le programme de demonstration de l'analyseur syntaxique.
  */

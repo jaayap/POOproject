@@ -3,8 +3,6 @@ package sysexp.builders.lorraine;
 import java.io.IOException;
 import java.util.HashMap;
 
-import sysexp.Jeton;
-import sysexp.Lexical;
 import sysexp.modele.Fait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;

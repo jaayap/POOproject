@@ -3,6 +3,9 @@ package sysexp;
 import java.io.IOException;
 import java.util.HashMap;
 
+import sysexp.builders.lorraine.Jeton;
+import sysexp.builders.lorraine.Lexical;
+
 public class Syntaxique {
 	protected Lexical lexical;
 	protected Jeton precharge;

@@ -1,6 +1,9 @@
 package sysexp;
 import java.io.IOException;
 
+import sysexp.builders.lorraine.Jeton;
+import sysexp.builders.lorraine.Lexical;
+
 /**
  * Classe representant un analyseur syntaxique de la grammaire.
  */

@@ -1,4 +1,5 @@
-package sysexp;
+package sysexp.builders.lorraine;
+
 
 /**
  * Classe representant une fabrique de jetons de la grammaire. 

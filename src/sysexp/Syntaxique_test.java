@@ -2,6 +2,9 @@ package sysexp;
 
 import java.io.IOException;
 
+import sysexp.builders.lorraine.Jeton;
+import sysexp.builders.lorraine.Lexical;
+
 public class Syntaxique_test {
 	protected Lexical lexical;
 	protected Jeton precharge;

@@ -1,10 +1,9 @@
 package sysexp.builders.lorraine;
 
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.HashMap;
 
-import sysexp.Jeton;
-import sysexp.Lexical;
 import sysexp.builders.Builder;
 import sysexp.modele.Fait;
 import sysexp.modele.FaitBooleen;
@@ -25,13 +24,29 @@ public class BuilderLorraine implements Builder{
 	protected HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
 	protected HashMap<String, Regle> baseDeRegles = new HashMap<String, Regle>();
 	
+	public BuilderLorraine(LineNumberReader lecteur) {
+		this.lexical = new Lexical(lecteur);
+	}
+	
+	public Lexical getlexical(){
+		return lexical;
+	}
 	/**
-	 * Doit fabriquer la base de regles en UN SEUL PAS.
-	 * Methode identique a vérifier dans syntaxique ?
+	 * @throws IOException 
 	 */
 	@Override
-	public void buildPart() {
-		// TODO 
+	public void buildPart() throws IOException {
+		// Pre-chargement du premier jeton.
+		precharge = lexical.suivant();
+
+		// Appel de la methode associee aux déclarations.
+		if (!estDeclaration()) {
+		    //return false;
+			System.out.println("erreur");
+		}
+
+		// Il faut verifier que nous avons atteint la fin du texte.
+		//return precharge.estFinExpression();
 		
 	}
 	protected boolean estDeclaration() throws IOException {
