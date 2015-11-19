@@ -58,7 +58,7 @@ public class Declaration {
 			return false;
 		}
 		else{
-			baseDeFaits.put(precharge.lireRepresentation(),new FaitBooleen());
+			baseDeFaits.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Booleen }
@@ -69,7 +69,7 @@ public class Declaration {
 			if (!precharge.estFait()) {
 				return false;
 			}else{
-				baseDeFaits.put(precharge.lireRepresentation(),new FaitBooleen());
+				baseDeFaits.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
@@ -107,7 +107,7 @@ public class Declaration {
 			return false;
 		}
 		else{
-			baseDeFaits.put(precharge.lireRepresentation(),new FaitSymbolique());
+			baseDeFaits.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Symbolique }
@@ -119,7 +119,7 @@ public class Declaration {
 				return false;
 			}
 			else{
-				baseDeFaits.put(precharge.lireRepresentation(),new FaitSymbolique());
+				baseDeFaits.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
@@ -156,7 +156,7 @@ public class Declaration {
 			return false;
 		}
 		else{
-			baseDeFaits.put(precharge.lireRepresentation(),new FaitEntier());
+			baseDeFaits.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Entier }
@@ -168,7 +168,7 @@ public class Declaration {
 				return false;
 			}
 			else{
-				baseDeFaits.put(precharge.lireRepresentation(),new FaitEntier());
+				baseDeFaits.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}

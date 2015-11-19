@@ -46,7 +46,7 @@ class DemoSyntaxique {
         Lexical lexical = new Lexical(lecteur);
 
         // Instanciation de l'analyseur syntaxique.
-        Syntaxique syntaxique = new Syntaxique(lexical);
+        Syntaxique_Regle syntaxique = new Syntaxique_Regle(lexical);
 
         // Verification de l'expression : il s'agit d'une operation a risque
         // qui doit etre encagee dans un traite-exception.
@@ -55,6 +55,7 @@ class DemoSyntaxique {
             // Verification.
             if (syntaxique.verifier()) {
                 System.out.println("Expression correcte.");
+                System.out.println(syntaxique.baseDeFaits);
                 return;
             }else{
             	System.out.println("expression incorrect");
@@ -86,6 +87,7 @@ class DemoSyntaxique {
             System.err.println("Impossible de lire [" + args[0] + "]");
             return;
         }
+        
 
     }
 

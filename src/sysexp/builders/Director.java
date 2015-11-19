@@ -1,7 +1,11 @@
 package sysexp.builders;
 
 import java.io.IOException;
-
+/**
+ * Cette classe corespond a la classe director dans le design pattern 'builder'
+ * @author Jasmine
+ *
+ */
 public class Director {
 	private Builder builder;
 	

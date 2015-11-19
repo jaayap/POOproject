@@ -50,9 +50,9 @@ class DemoSyntaxique {
         aDirector.construct();
         // Instanciation de l'analyseur syntaxique.
      //   Syntaxique syntaxique = new Syntaxique(lexical);
-
+        System.out.println(builder.test+"-------------------------------");
         // Verification.
-		if (true) {
+		if (builder.test) {
 		    System.out.println("Expression correcte.");
 		    return;
 		}else{

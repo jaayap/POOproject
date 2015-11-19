@@ -1,73 +1,46 @@
-package sysexp.builders.lorraine;
+package sysexp;
 
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.HashMap;
 
-import sysexp.builders.Builder;
+import sysexp.builders.lorraine.Jeton;
+import sysexp.builders.lorraine.Lexical;
 import sysexp.modele.Fait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
-import sysexp.modele.Regle;
 
-/**
- * Cette classe represente le ConcreteBuilder
- * Cette classe doit assurer l'analyse Syntaxique ET sémantique de la base de règles
- * Ainsi que la construction de la base de règles
- * @author Jasmine
- *
- */
-public class BuilderLorraine implements Builder{
+public class Syntaxique_Declaration {
 	protected Lexical lexical;
 	protected Jeton precharge;
-	protected HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
-	protected HashMap<String, Regle> baseDeRegles = new HashMap<String, Regle>();
-	public boolean test;
+	public HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
 	
-	public BuilderLorraine(LineNumberReader lecteur) {
-		this.lexical = new Lexical(lecteur);
+	public Syntaxique_Declaration(Lexical lexical) {
+			this.lexical = lexical;
 	}
-	
-	public Lexical getlexical(){
-		return lexical;
-	}
-	/**
-	 * @throws IOException 
-	 */
-	@Override
-	public void buildPart() throws IOException {
-		// Pre-chargement du premier jeton.
+	 
+	public boolean verifier() throws IOException {
 		precharge = lexical.suivant();
-		estBaseDeConnaissance();
-		
+		while(!precharge.estFinExpression()){
+			if (!estDeclaration()) {
+			    return false;
+			}
+		}	
+		return precharge.estFinExpression();
+	
 	}
-	public boolean estBaseDeConnaissance() throws IOException{
-		System.out.println("c'est parti");
-		// Appel de la methode associee aux déclarations.
-				if (!estDeclaration()) {
-					System.out.println("c'est parti2");
-				    return test = false;
-					//System.out.println("erreur");
-				}
-				System.out.println("c'est parti3"+precharge.lireRepresentation());
-				// Il faut verifier que nous avons atteint la fin du texte.
-				return test = precharge.estFinExpression();
-	}
+	
 	protected boolean estDeclaration() throws IOException {
 		// C'est une déclaration si c'est
 		// une declaration_booleene ou une declatation_symbolique ou une declaration_entiere
 		if (estDeclarationEntiere() || estDeclarationBooleene() || estDeclarationSymbolique()) {
-			System.out.println("c'est miahou "+precharge.lireRepresentation());
 			return true;
 		}
-		System.out.println("c'est miahou2"+precharge.lireRepresentation());
 		// Sinon ce n'est pas une déclaration
 		return false;
 	}
 
 	protected boolean estDeclarationBooleene() throws IOException {
-		System.out.println("ici"+precharge.lireRepresentation());
 		// 'faits_booleens' : mot clé
 		if (precharge.estFaits_Booleens()) { // On test si c'est bien le jeton 'faits_booleens'
 			precharge = lexical.suivant();// Oui, on passe a la suite
@@ -101,6 +74,9 @@ public class BuilderLorraine implements Builder{
 			return false;
 		}
 		else{
+			if(baseDeFaits.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
 			baseDeFaits.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
@@ -120,7 +96,6 @@ public class BuilderLorraine implements Builder{
 	}
 	
 	protected boolean estDeclarationSymbolique() throws IOException{
-		System.out.println("c'est parti4"+precharge.lireRepresentation());
 		// 'faits_symboliques'  : mot clé
 		if(precharge.estFaits_Symboliques()){//jeton 'faits_symboliques'
 			precharge = lexical.suivant();
@@ -138,10 +113,8 @@ public class BuilderLorraine implements Builder{
 			return false;
 		}
 		// ';'
-		System.out.println("c'est ppii "+precharge.lireRepresentation());
 		if(precharge.estPointVirgule()){
 			precharge = lexical.suivant();
-			System.out.println("c'est piiiiii "+precharge.lireRepresentation());
 		}else{
 			return false;
 		}
@@ -149,16 +122,17 @@ public class BuilderLorraine implements Builder{
 	}
 	protected boolean estFaitsSymboliques() throws IOException{
 		//Fait_Symbolique
-		System.out.println("c'est ii "+precharge.lireRepresentation());
 		if(!precharge.estFait()){
 			return false;
 		}
 		else{
+			if(baseDeFaits.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
 			baseDeFaits.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Symbolique }
-		System.out.println("c'est pii "+precharge.lireRepresentation());
 		while(precharge.estVirgule()){
 			//on passe au suivant
 			precharge = lexical.suivant();
@@ -177,40 +151,36 @@ public class BuilderLorraine implements Builder{
 		// 'faits_entiers' : mot clé
 		if(precharge.estFaits_Entiers()){
 			precharge = lexical.suivant();//jeton 'faits_entiers'
-			System.out.println("c'est parti4"+precharge.lireRepresentation());
 		}else{
 			return false;
 		}
 		//'='
 		if(precharge.estComparateurEgal()){
 			precharge = lexical.suivant();// jeton '='
-			System.out.println("aprés égal "+precharge.lireRepresentation());
 		}else{
 			return false;
 		}
 		// Faits_Entiers
 		if(!estFaitsEntiers()){ // Liste de faits entiers
-			System.out.println("fortune "+precharge.lireRepresentation());
 			return false;
 		}
-		System.out.println("fortune ,  ff"+precharge.lireRepresentation());
 		// ';'
 		if(precharge.estPointVirgule()){
 			precharge = lexical.suivant();
 		}else{
 			return false;
 		}
-		System.out.println("TRUE 2 "+precharge.lireRepresentation());
 		return true;
 	}
 	protected boolean estFaitsEntiers() throws IOException{
-		System.out.println("test 1 "+precharge.lireRepresentation());
 		//Fait_Entier
 		if(!precharge.estFait()){
-			System.out.println("test 2 "+precharge.lireRepresentation());
 			return false;
 		}
 		else{
+			if(baseDeFaits.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
 			baseDeFaits.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
@@ -227,53 +197,6 @@ public class BuilderLorraine implements Builder{
 				precharge = lexical.suivant();
 			}
 		}
-		System.out.println("TRUE 1"+precharge.lireRepresentation());
 		return true;
-	}
-//-----------------------------------------------------------------------------------------------------------------------
-// Methodes liées aux regles :---------------------------------------------
-/*
-	protected boolean estRegles() throws IOException {
-		// { Regle ';' }
-		while (estRegle()) {
-			// il doit obligatoirement y avoir un point virgule derriere une Regle
-			if (precharge.estPointVirgule()) {
-				precharge = lexical.suivant();
-			}
-			else {
-				return false;
-			}
-		}
-		return true; // devrait retourner true mais ne fonctionne plus
-						// lorsqu"on met true
-	}
-	protected boolean estRegle() throws IOException{
-		if(estRegleSansPremisse() || estRegleAvecPremisses()){
-			return true;
-		}
-		return false;
-	}
-	protected boolean estRegleSansPremisse() throws IOException{
-	/*	if(estConclusion()){
-			return true;
-		}*/
-/*		return false;
-	}
-	
-	protected boolean estRegleAvecPremisses() throws IOException{
-		return false;
-	}
-	/**
-	 * retourne la base de faits
-	 */
-	public HashMap<String,Fait> getBaseDeFaits(){
-		return baseDeFaits;
-	}
-	/**
-	 * 
-	 * @return Le produit fini soit la base de regles
-	 */
-	public HashMap<String, Regle> getBaseDeRegles(){
-		return baseDeRegles;
 	}
 }

@@ -1,8 +1,18 @@
 package sysexp.modele;
 
-public class FaitSymbolique implements Fait {
+public class FaitSymbolique implements FaitAbstrait {
 	
 	protected String nom;
+	protected String valeur;
+	
+
+	public FaitSymbolique(String nom,String valeur){
+		this.nom = nom;
+		this.valeur = valeur;
+	}
+	public FaitSymbolique(String nom){
+		this.nom = nom;
+	}
 	
 	public String valeur(){
 		return " ";

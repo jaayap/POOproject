@@ -1,5 +1,5 @@
 package sysexp.modele;
 
-public class RegleAvecPremisse implements Regle{
+public class RegleAvecPremisse implements RegleAbstraite{
 
 }

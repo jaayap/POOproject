@@ -1,6 +1,6 @@
 package sysexp.modele;
 
-public interface Regle {
+public interface RegleAbstraite {
 	/**
 	 * la classe mère des règles devra définir 
 	 * un attribut numero (de type long puisque le nombre de règles peut être très important)
