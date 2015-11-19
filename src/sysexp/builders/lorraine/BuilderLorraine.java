@@ -6,10 +6,12 @@ import java.util.HashMap;
 
 import sysexp.builders.Builder;
 import sysexp.modele.Fait;
+import sysexp.modele.FaitAbstrait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
 import sysexp.modele.Regle;
+import sysexp.modele.RegleAbstraite;
 
 /**
  * Cette classe represente le ConcreteBuilder
@@ -21,8 +23,8 @@ import sysexp.modele.Regle;
 public class BuilderLorraine implements Builder{
 	protected Lexical lexical;
 	protected Jeton precharge;
-	protected HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
-	protected HashMap<String, Regle> baseDeRegles = new HashMap<String, Regle>();
+	protected HashMap<String, FaitAbstrait> baseDeFaits = new HashMap<String, FaitAbstrait>();
+	protected HashMap<String, RegleAbstraite> baseDeRegles = new HashMap<String, RegleAbstraite>();
 	public boolean test;
 	
 	public BuilderLorraine(LineNumberReader lecteur) {
@@ -266,14 +268,14 @@ public class BuilderLorraine implements Builder{
 	/**
 	 * retourne la base de faits
 	 */
-	public HashMap<String,Fait> getBaseDeFaits(){
+	public HashMap<String,FaitAbstrait> getBaseDeFaits(){
 		return baseDeFaits;
 	}
 	/**
 	 * 
 	 * @return Le produit fini soit la base de regles
 	 */
-	public HashMap<String, Regle> getBaseDeRegles(){
+	public HashMap<String, RegleAbstraite> getBaseDeRegles(){
 		return baseDeRegles;
 	}
 }

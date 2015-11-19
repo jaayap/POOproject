@@ -5,13 +5,13 @@ import java.util.HashMap;
 
 import sysexp.builders.lorraine.Jeton;
 import sysexp.builders.lorraine.Lexical;
-import sysexp.modele.Fait;
+import sysexp.modele.FaitAbstrait;
 import sysexp.modele.FaitBooleen;
 
 public class Syntaxique_Regle {
 	protected Lexical lexical;
 	protected Jeton precharge;
-	public HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
+	public HashMap<String, FaitAbstrait> baseDeFaits = new HashMap<String, FaitAbstrait>();
 	
 	
 	public Syntaxique_Regle(Lexical lexical) {

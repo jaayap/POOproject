@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import sysexp.builders.lorraine.Jeton;
 import sysexp.builders.lorraine.Lexical;
-import sysexp.modele.Fait;
+import sysexp.modele.FaitAbstrait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
@@ -13,7 +13,7 @@ import sysexp.modele.FaitSymbolique;
 public class Syntaxique_Declaration {
 	protected Lexical lexical;
 	protected Jeton precharge;
-	public HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
+	public HashMap<String, FaitAbstrait> baseDeFaits = new HashMap<String, FaitAbstrait>();
 	
 	public Syntaxique_Declaration(Lexical lexical) {
 			this.lexical = lexical;
