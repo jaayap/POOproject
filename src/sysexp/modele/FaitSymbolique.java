@@ -10,12 +10,13 @@ public class FaitSymbolique implements FaitAbstrait {
 		this.nom = nom;
 		this.valeur = valeur;
 	}
+	
 	public FaitSymbolique(String nom){
 		this.nom = nom;
 	}
 	
 	public String valeur(){
-		return " ";
+		return valeur;
 	}
 
 	@Override

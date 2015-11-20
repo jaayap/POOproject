@@ -6,7 +6,7 @@ package sysexp.modele;
  *
  */
 public interface FaitAbstrait {
-
+	
 	public String getNomFait();
 	
 }
