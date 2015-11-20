@@ -3,7 +3,7 @@ package sysexp.builders.lorraine;
 import java.io.IOException;
 import java.util.HashMap;
 
-import sysexp.modele.Fait;
+import sysexp.modele.FaitAbstrait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
@@ -11,7 +11,7 @@ import sysexp.modele.FaitSymbolique;
 public class Declaration {
 	protected Lexical lexical;
 	protected Jeton precharge;
-	protected HashMap<String, Fait> baseDeFaits = new HashMap<String, Fait>();
+	protected HashMap<String, FaitAbstrait> faitsDeclares = new HashMap<String, FaitAbstrait>();
 	
 	protected boolean estDeclaration() throws IOException {
 		// C'est une déclaration si c'est
@@ -58,7 +58,7 @@ public class Declaration {
 			return false;
 		}
 		else{
-			baseDeFaits.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
+			faitsDeclares.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Booleen }
@@ -69,7 +69,7 @@ public class Declaration {
 			if (!precharge.estFait()) {
 				return false;
 			}else{
-				baseDeFaits.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
+				faitsDeclares.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
@@ -107,7 +107,7 @@ public class Declaration {
 			return false;
 		}
 		else{
-			baseDeFaits.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
+			faitsDeclares.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Symbolique }
@@ -119,7 +119,7 @@ public class Declaration {
 				return false;
 			}
 			else{
-				baseDeFaits.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
+				faitsDeclares.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
@@ -156,7 +156,7 @@ public class Declaration {
 			return false;
 		}
 		else{
-			baseDeFaits.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
+			faitsDeclares.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Entier }
@@ -168,7 +168,7 @@ public class Declaration {
 				return false;
 			}
 			else{
-				baseDeFaits.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
+				faitsDeclares.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}

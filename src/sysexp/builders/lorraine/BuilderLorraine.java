@@ -5,12 +5,10 @@ import java.io.LineNumberReader;
 import java.util.HashMap;
 
 import sysexp.builders.Builder;
-import sysexp.modele.Fait;
 import sysexp.modele.FaitAbstrait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
-import sysexp.modele.Regle;
 import sysexp.modele.RegleAbstraite;
 
 /**
@@ -42,6 +40,10 @@ public class BuilderLorraine implements Builder{
 		// Pre-chargement du premier jeton.
 		precharge = lexical.suivant();
 		estBaseDeConnaissance();
+		
+	}
+	
+	public void nouvelleRegle(String[] components){
 		
 	}
 	public boolean estBaseDeConnaissance() throws IOException{
