@@ -1,12 +1,15 @@
 package sysexp.modele;
 
 import java.util.HashMap;
+import sysexp.modele.visitor.Forme;
 
 public class RegleSansPremisse implements RegleAbstraite{
-	final long numero;
+	protected final long numero;
+	protected Forme conclusion;
 	
-	public RegleSansPremisse(long numero){
+	public RegleSansPremisse(long numero, Forme conclusion){
 		this.numero = numero;
+		this.conclusion = conclusion;
 	}
 	
 	@Override

@@ -1,6 +1,18 @@
+faits_booleens = avoir_fait_prison , habite_chateau , intelligent , fort ,
+riche , grand , lourd , malhonnete , parents_riches , pauvre , travailleur ,
+chercheur , thesard , leger ;
 
 
-leger;
-non avoir_fait_prison;
-si leger alors avoir_fait_prison;
-si leger et avoir_fait_prison alors leger;
+faits_symboliques=profession ;
+faits_entiers =fortune , fortune_parents , poids , taille , travail_par_jour ,
+combien ;
+
+non habite_chateau;
+chercheur ;
+non thesard ;
+
+si non habite_chateau alors pauvre ;
+si riche alors non pauvre ;
+si pauvre alors non riche ;
+si avoir_fait_prison alors malhonnete ;
+

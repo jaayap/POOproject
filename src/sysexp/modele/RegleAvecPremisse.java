@@ -1,12 +1,19 @@
 package sysexp.modele;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+
+import sysexp.modele.visitor.Forme;
 
 public class RegleAvecPremisse implements RegleAbstraite{
-	final long numero;
+	protected final long numero;
+	protected LinkedList<Forme> condition;
+	protected Forme conclusion;
 	
-	public RegleAvecPremisse(long numero){
+	public RegleAvecPremisse(long numero,LinkedList<Forme> condition, Forme conclusion){
 		this.numero = numero;
+		this.condition = condition;
+		this.conclusion = conclusion;
 	}
 	
 	@Override

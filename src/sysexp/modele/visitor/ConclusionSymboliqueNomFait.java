@@ -2,16 +2,16 @@ package sysexp.modele.visitor;
 
 import sysexp.modele.FaitSymbolique;
 
-public class PremisseSymboliqueNomFait implements Forme {
+public class ConclusionSymboliqueNomFait implements Forme {
 	protected FaitSymbolique nomFait;
 	
-	public PremisseSymboliqueNomFait(FaitSymbolique nomFait){
+	public ConclusionSymboliqueNomFait(FaitSymbolique nomFait){
 		this.nomFait = nomFait;
 	}
 	
 	@Override
 	public void accept(VisiteurForme visiteur) {
-		visiteur.visitPremisseSymboliqueNomFait(this);
+		visiteur.visitConclusionSymboliqueNomFait(this);
 	}
 
 }

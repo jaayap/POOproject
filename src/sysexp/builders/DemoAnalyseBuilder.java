@@ -11,7 +11,7 @@ import sysexp.builders.lorraine.BuilderLorraine;
 /**
  * Classe representant le programme de demonstration de l'analyseur syntaxique.
  */
-class DemoSyntaxique {
+class DemoAnalyseBuilder {
 
     /**
      * Point d'entree de la JVM.
@@ -45,12 +45,10 @@ class DemoSyntaxique {
         }
 
         // Instanciation de l'analyseur lexical.
-        BuilderLorraine builder = new BuilderLorraine(lecteur);
+        BuilderLorraine builder = new BuilderLorraine(lecteur); // le builder instancie Lexical
         Director aDirector = new Director(builder);
         aDirector.construct();
-        // Instanciation de l'analyseur syntaxique.
-     //   Syntaxique syntaxique = new Syntaxique(lexical);
-        System.out.println(builder.test+"-------------------------------");
+    //    System.out.println(builder.test+"-------------------------------");
         // Verification.
 		if (builder.test) {
 		    System.out.println("Expression correcte.");

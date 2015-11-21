@@ -14,7 +14,7 @@ public interface VisiteurForme {
 
 	void visitPremisseEntiereNomFait(PremisseEntiereNomFait premisse);
 	
-	void visitConclusionSymboliqueExpression(ConclusionSymboliqueExpression conclusion);
+	void visitConclusionSymboliqueNomFait(ConclusionSymboliqueNomFait conclusion);
 
 	void visitConclusionBooleeneAffirmation(ConclusionBooleeneAffirmation conclusion);
 
@@ -25,5 +25,5 @@ public interface VisiteurForme {
 	void visitConclusionEntiereExpression(ConclusionEntiereExpression conclusion);
 
 	void visitConclusionBooleeneNegation(ConclusionBooleeneNegation conclusion);
-	
+
 }

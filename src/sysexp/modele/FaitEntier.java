@@ -1,11 +1,13 @@
 package sysexp.modele;
 
-public class FaitEntier implements FaitAbstrait {
+import java.util.HashMap;
+
+public class FaitEntier implements FaitAbstrait,ExpressionEntiere {
 	
-	protected String nom = "";
-	protected int valeur=0;
+	protected String nom;
+	protected long valeur;
 	
-	public FaitEntier(String nom, int valeur){
+	public FaitEntier(String nom, long valeur){
 		this.nom = nom;
 		this.valeur = valeur;
 	}
@@ -14,7 +16,7 @@ public class FaitEntier implements FaitAbstrait {
 		this.nom = nom;
 	}
 	
-	public int valeur(){
+	public long valeur(){
 		return valeur;
 	}
 
@@ -22,4 +24,13 @@ public class FaitEntier implements FaitAbstrait {
 	public String getNomFait() {
 		return nom;
 	}
+	
+	@Override
+	public long interpret(HashMap<String, FaitAbstrait> baseDeFaits)  throws  NoContainsKeyException{
+			if(!baseDeFaits.containsKey(nom)){
+				 throw new NoContainsKeyException(nom);
+			}
+			return valeur;
+		}
+
 }

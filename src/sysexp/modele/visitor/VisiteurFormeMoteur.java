@@ -63,22 +63,29 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 	}
 
 	@Override
-	public void visitConclusionSymboliqueExpression(
-			ConclusionSymboliqueExpression conclusion) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void visitConclusionBooleeneAffirmation(
 			ConclusionBooleeneAffirmation conclusion) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	public void visitConclusionBooleeneNegation(
+			ConclusionBooleeneNegation conclusion) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@Override
 	public void visitConclusionSymboliqueConstante(
 			ConclusionSymboliqueConstante conclusion) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void visitConclusionSymboliqueNomFait(
+			ConclusionSymboliqueNomFait conclusion) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -97,10 +104,7 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 		
 	}
 
-	@Override
-	public void visitConclusionBooleeneNegation(
-			ConclusionBooleeneNegation conclusion) {
-		// TODO Auto-generated method stub
-		
-	}
+
+
+
 }

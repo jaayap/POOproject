@@ -3,13 +3,28 @@ package sysexp.builders.lorraine;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import sysexp.builders.Builder;
-import sysexp.modele.FaitAbstrait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
 import sysexp.modele.RegleAbstraite;
+import sysexp.modele.RegleAvecPremisse;
+import sysexp.modele.RegleSansPremisse;
+import sysexp.modele.visitor.ConclusionBooleeneAffirmation;
+import sysexp.modele.visitor.ConclusionBooleeneNegation;
+import sysexp.modele.visitor.ConclusionEntiereExpression;
+import sysexp.modele.visitor.ConclusionEntiereNomFait;
+import sysexp.modele.visitor.ConclusionSymboliqueConstante;
+import sysexp.modele.visitor.ConclusionSymboliqueNomFait;
+import sysexp.modele.visitor.Forme;
+import sysexp.modele.visitor.PremisseBooleeneAffirmation;
+import sysexp.modele.visitor.PremisseBooleeneNegation;
+import sysexp.modele.visitor.PremisseEntiereExpression;
+import sysexp.modele.visitor.PremisseEntiereNomFait;
+import sysexp.modele.visitor.PremisseSymboliqueConstante;
+import sysexp.modele.visitor.PremisseSymboliqueNomFait;
 
 /**
  * Cette classe represente le ConcreteBuilder
@@ -21,8 +36,32 @@ import sysexp.modele.RegleAbstraite;
 public class BuilderLorraine implements Builder{
 	protected Lexical lexical;
 	protected Jeton precharge;
-	protected HashMap<String, FaitAbstrait> faitsDeclares = new HashMap<String, FaitAbstrait>();
+	//protected HashMap<String, FaitAbstrait> faitsDeclares = new HashMap<String, FaitAbstrait>();
+	protected HashMap<String, FaitEntier> faitsDeclaresEntier = new HashMap<String, FaitEntier>();
+	protected HashMap<String, FaitBooleen> faitsDeclaresBooleen = new HashMap<String, FaitBooleen>();
+	protected HashMap<String, FaitSymbolique> faitsDeclaresSymbolique = new HashMap<String, FaitSymbolique>();
+	
 	protected HashMap<String, RegleAbstraite> baseDeRegles = new HashMap<String, RegleAbstraite>();
+	
+	//protected TreeSet<Forme> condition;
+	protected LinkedList<Forme> condition = new LinkedList<Forme>();
+	
+	protected PremisseBooleeneAffirmation premisseBoolAffirmation;
+	protected PremisseBooleeneNegation premisseBoolNegation;
+	protected PremisseEntiereExpression premisseEntExp;
+	protected PremisseEntiereNomFait premisseEntFait;
+	protected PremisseSymboliqueConstante premisseSymboConst;
+	protected PremisseSymboliqueNomFait premisseSymboFait;
+	
+	protected ConclusionBooleeneAffirmation conclusionBoolAffirmation = null;
+	protected ConclusionBooleeneNegation conclusionBoolNegation = null;
+	protected ConclusionEntiereExpression conclusionEntExp = null;
+	protected ConclusionEntiereNomFait conclusionEntFait = null;
+	protected ConclusionSymboliqueConstante conclusionSymboConst = null;
+	protected ConclusionSymboliqueNomFait conclusionSymboFait = null;
+	
+	protected RegleAbstraite nouvelleRegle;
+	protected long numeroRegle;
 	public boolean test;
 	
 	public BuilderLorraine(LineNumberReader lecteur) {
@@ -43,14 +82,64 @@ public class BuilderLorraine implements Builder{
 		
 	}
 	
-	public void nouvelleRegle(String[] components){
-		
+	public void nouvelleRegleSansPremisse(){
+		if(conclusionBoolAffirmation != null){
+			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionBoolAffirmation);
+		}
+		if(conclusionBoolNegation != null){
+			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionBoolNegation);
+		}
+		if(conclusionEntExp != null){
+			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionEntExp);
+		}
+		if(conclusionEntFait != null){
+			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionEntFait);
+		}
+		if(conclusionSymboConst != null){
+			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionSymboConst);
+		}
+		if(conclusionSymboFait != null){
+			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionSymboFait);
+		}
+		numeroRegle++;
+	}
+	
+	public void nouvelleRegleAvecPremisse(){
+		if(conclusionBoolAffirmation != null){
+			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolAffirmation);
+		}
+		if(conclusionBoolNegation != null){
+			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolNegation);
+		}
+		if(conclusionEntExp != null){
+			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntExp);
+		}
+		if(conclusionEntFait != null){
+			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntFait);
+		}
+		if(conclusionSymboConst != null){
+			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboConst);
+		}
+		if(conclusionSymboFait != null){
+			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboFait);
+		}
+		numeroRegle++;
+	}
+	
+	public void viderVariable() {
+		condition.clear();
+		conclusionBoolAffirmation = null;
+		conclusionBoolNegation = null;
+		conclusionEntExp = null;
+		conclusionEntFait = null;
+		conclusionSymboConst = null;
+		conclusionSymboFait = null;
 	}
 	/**
 	 * retourne les faits déclarés
 	 */
-	public HashMap<String,FaitAbstrait> getFaitsDeclares(){
-		return faitsDeclares;
+	public HashMap<String,FaitEntier> getFaitsDeclaresEntier(){
+		return faitsDeclaresEntier;
 	}
 	/**
 	 * 
@@ -60,17 +149,24 @@ public class BuilderLorraine implements Builder{
 		return baseDeRegles;
 	}
 	
-//Methodes liés a la construction de la base de régles :
-//Vérification syntaxique et sémantique des déclarations :
+//Methodes liés a la construction de la base de régles : --------------------------------------------------
+	
+
+	
 	public boolean estBaseDeConnaissance() throws IOException{
 		// Appel de la methode associee aux déclarations.
-				if (!estDeclaration()) {
+		while(!precharge.estFinExpression()){
+				if (!estDeclaration() && !estRegles()) {
 				    return test = false;
-					//System.out.println("erreur");
 				}
+		}
 				// Il faut verifier que nous avons atteint la fin du texte.
 				return test = precharge.estFinExpression();
-	}protected boolean estDeclaration() throws IOException {
+	}
+
+//Vérification syntaxique et sémantique des déclarations :
+	
+	protected boolean estDeclaration() throws IOException {
 		// C'est une déclaration si c'est
 		// une declaration_booleene ou une declatation_symbolique ou une declaration_entiere
 		if (estDeclarationEntiere() || estDeclarationBooleene() || estDeclarationSymbolique()) {
@@ -114,10 +210,12 @@ public class BuilderLorraine implements Builder{
 			return false;
 		}
 		else{
-			if(faitsDeclares.containsKey(precharge.lireRepresentation())){
+			if(faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			faitsDeclares.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
+			//faitsDeclares.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
+			FaitBooleen fait = new FaitBooleen(precharge.lireRepresentation());
+			faitsDeclaresBooleen.put(precharge.lireRepresentation(),fait);
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Booleen }
@@ -128,7 +226,8 @@ public class BuilderLorraine implements Builder{
 			if (!precharge.estFait()) {
 				return false;
 			}else{
-				faitsDeclares.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
+			//	faitsDeclares.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
+				faitsDeclaresBooleen.put(precharge.lireRepresentation(),new FaitBooleen(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
@@ -166,10 +265,11 @@ public class BuilderLorraine implements Builder{
 			return false;
 		}
 		else{
-			if(faitsDeclares.containsKey(precharge.lireRepresentation())){
+			if(faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			faitsDeclares.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
+			//faitsDeclares.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
+			faitsDeclaresSymbolique.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Symbolique }
@@ -181,7 +281,8 @@ public class BuilderLorraine implements Builder{
 				return false;
 			}
 			else{
-				faitsDeclares.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
+				//faitsDeclares.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
+				faitsDeclaresSymbolique.put(precharge.lireRepresentation(),new FaitSymbolique(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
@@ -218,10 +319,11 @@ public class BuilderLorraine implements Builder{
 			return false;
 		}
 		else{
-			if(faitsDeclares.containsKey(precharge.lireRepresentation())){
+			if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			faitsDeclares.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
+			//faitsDeclares.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
+			faitsDeclaresEntier.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		// { ',' Fait_Entier }
@@ -233,12 +335,186 @@ public class BuilderLorraine implements Builder{
 				return false;
 			}
 			else{
-				faitsDeclares.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
+			//	faitsDeclares.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
+				faitsDeclaresEntier.put(precharge.lireRepresentation(),new FaitEntier(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
 		return true;
 	}
+	
+//Vérification syntaxique et sémantique des règles : 
+	
+	protected boolean estRegles() throws IOException{
+		//{ Regle ';' }
+		if (estRegle()){
+			// il doit obligatoirement y avoir un point virgule derriere une Regle
+			if(precharge.estPointVirgule()){
+				precharge = lexical.suivant();
+			}else{
+				return false;
+			}
+			return true;
+		}
+		else{
+			return false;
+		}
 
+		
+	}
+	
+	protected boolean estRegle() throws IOException{
+		if(estRegleSansPremisse() || estRegleAvecPremisses()){
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean estRegleSansPremisse() throws IOException{
+		if(estConclusion()){
+			nouvelleRegleSansPremisse();
+			viderVariable();
+			return true;
+		}
+		return false;
+	}
+	 
+	protected boolean estRegleAvecPremisses() throws IOException{
+		//'si'
+		if(precharge.estSi()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		//Condition
+		if(!estCondition()){
+			return false;
+		}
+		//'alors'
+		if(precharge.estAlors()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		//Conclusion
+		if(!estConclusion()){
+			return false;
+		}
+		nouvelleRegleAvecPremisse();
+		viderVariable();
+		return true;
+	}
+	
+	protected boolean estCondition() throws IOException{
+		//Premisse
+		if(!estPremisse()){
+			return false;
+		}
+		
+		//{ et Premisse } 
+		while(precharge.estEt()){
+			precharge = lexical.suivant();
+			if(!estPremisse()){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	protected boolean estConclusion() throws IOException{
+		if(estConclusionBooleene()){
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean estConclusionBooleene() throws IOException{
+		if(estConclusionBooleeneAffirmation() || estConclusionBooleeneNegation()){
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean estConclusionBooleeneAffirmation() throws IOException{
+		//Fait_booleen 
+		//Si c'est un fait booleen, on passe au suivant
+		if(faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){
+			
+				conclusionBoolAffirmation = new ConclusionBooleeneAffirmation(precharge.lireRepresentation());
+				precharge = lexical.suivant();
+				return true;
+		}else{
+			return false;
+		}
+	}
+	
+	protected boolean estConclusionBooleeneNegation() throws IOException{
+		//'non' Fait_Booleen
+		if(!precharge.estNon()){
+			return false;
+		}
+		
+		//Si c'est non fait booleen
+		while(precharge.estNon()){
+			precharge = lexical.suivant();
+			if(!faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			else{
+				conclusionBoolNegation = new ConclusionBooleeneNegation(precharge.lireRepresentation());
+				precharge = lexical.suivant();
+			}
+		}
+		return true;
+	}
+	
+	protected boolean estPremisse() throws IOException{
+		if(estPremisseBooleene()){
+			return true;
+		}
+		return false;
+	}
+	protected boolean estPremisseBooleene() throws IOException{
+		if(estPremisseBooleeneAffirmation() || estPremisseBooleeneNegation()){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	protected boolean estPremisseBooleeneAffirmation() throws IOException{
+		//Fait_booleen
+		if(faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){ // on vérifie que la chaine de caractere contenu 
+			premisseBoolAffirmation = new PremisseBooleeneAffirmation(precharge.lireRepresentation());
+			condition.add(premisseBoolAffirmation);
+			precharge = lexical.suivant();
+			return true;
+		}
+		else{
+			return false;
+		}
+	
+	}
+	protected boolean estPremisseBooleeneNegation() throws IOException{
+		// 'non' Fait_Booleen
+		if(!precharge.estNon()){
+			return false;
+		}
+		
+		while(precharge.estNon()){
+			precharge = lexical.suivant();
+			if(!faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			else{
+				premisseBoolNegation = new PremisseBooleeneNegation(precharge.lireRepresentation());
+				condition.add(premisseBoolNegation);	
+				precharge = lexical.suivant();
+			}
+		}
+		return true;
+	}
 
 }
