@@ -54,6 +54,7 @@ public class BuilderLorraine implements Builder{
 	protected PremisseSymboliqueNomFait premisseSymboFait;
 	protected String premisse;
 	protected String conclusion;
+	protected String expressionEntiere;
 	
 	protected ConclusionBooleeneAffirmation conclusionBoolAffirmation = null;
 	protected ConclusionBooleeneNegation conclusionBoolNegation = null;
@@ -137,12 +138,14 @@ public class BuilderLorraine implements Builder{
 		conclusionSymboConst = null;
 		conclusionSymboFait = null;
 	}
+	
 	/**
 	 * retourne les faits déclarés
 	 */
 	public HashMap<String,FaitEntier> getFaitsDeclaresEntier(){
 		return faitsDeclaresEntier;
 	}
+	
 	/**
 	 * 
 	 * @return Le produit fini soit la base de regles
@@ -422,7 +425,7 @@ public class BuilderLorraine implements Builder{
 	}
 	
 	protected boolean estConclusion() throws IOException{
-		if(estConclusionBooleene() || estConclusionSymbolique()){
+		if(estConclusionBooleene() || estConclusionSymbolique() || estConclusionEntiere()){
 			return true;
 		}
 		return false;
@@ -490,19 +493,20 @@ public class BuilderLorraine implements Builder{
 		}
 		
 		//Constante symbolique : jeton fait mais n'est dans aucune hashMap
-				if(precharge.estFait()){
-					if(
-						faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())
-						|| faitsDeclaresEntier.containsKey(precharge.lireRepresentation())
-						|| faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())
-					  ){
-						return false;
-					}
-					//c'est bien une constante
-					conclusion = " "+precharge.lireRepresentation();
-					conclusionSymboConst = new ConclusionSymboliqueConstante(conclusion);
-					precharge = lexical.suivant();
-				}
+		if(precharge.estFait()){
+			if(
+				faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())
+				|| faitsDeclaresEntier.containsKey(precharge.lireRepresentation())
+				|| faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())
+			){
+				return false;
+			}
+			//c'est bien une constante
+			conclusion = " "+precharge.lireRepresentation();
+			conclusionSymboConst = new ConclusionSymboliqueConstante(conclusion);
+			//Verifier s'il faut vider la chaine condition ou pas; je ne pense pas
+			precharge = lexical.suivant();
+		}
 		return true;
 	}
 	
@@ -536,8 +540,64 @@ public class BuilderLorraine implements Builder{
 		return true;
 	}
 	
+	protected boolean estConclusionEntiere() throws IOException{
+		if(estConclusionEntiereExpression() || estConclusionEntiereNomFait()){
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean estConclusionEntiereExpression() throws IOException{
+		//Fait_entier
+		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		// '='
+		if(precharge.estComparateurEgal()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		
+		//Expression_Entiere
+		if(!estExpressionEntiere()){
+			return false;
+		}
+		return true;
+	}
+	
+	protected boolean estConclusionEntiereNomFait() throws IOException{
+		//Fait_entier
+		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		// '='
+		if(precharge.estComparateurEgal()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		
+		//Fait_entier
+		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		return true;
+	}
+	
 	protected boolean estPremisse() throws IOException{
-		if(estPremisseBooleene() || estPremisseSymbolique()){
+		if(estPremisseBooleene() || estPremisseSymbolique() || estPremisseEntiere()){
 			return true;
 		}
 		return false;
@@ -626,7 +686,6 @@ public class BuilderLorraine implements Builder{
 			premisseSymboConst = new PremisseSymboliqueConstante(premisse);
 			condition.add(premisseSymboFait); // on ajoute la premisse a la liste
 			premisse = "";// on vide la chaine 
-			
 			precharge = lexical.suivant();
 		}
 		return true;
@@ -659,10 +718,179 @@ public class BuilderLorraine implements Builder{
 			premisse+= " "+precharge.lireRepresentation();
 			premisseSymboFait = new PremisseSymboliqueNomFait(premisse);
 			condition.add(premisseSymboFait);
+			premisse = "";// on vide la chaine 
 			precharge = lexical.suivant();
 		}
 		
 		return true;
 	}
+	
+	protected boolean estPremisseEntiere() throws IOException{
+		if(estPremisseEntiereExpression() || estPremisseEntiereNomFait()){
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean estPremisseEntiereExpression() throws IOException{
+		//Fait_entier
+		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		// Comparateur
+		if(estComparateur()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		
+		//Expression_Entiere
+		if(!estExpressionEntiere()){
+			return false;
+		}
+		return true;
+	}
+	
+	protected boolean estPremisseEntiereNomFait() throws IOException{
+		//Fait_entier
+		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		// Comparateur
+		if(estComparateur()){
+			precharge = lexical.suivant();
+		}
+		else{
+			return false;
+		}
+		
+		//Fait_entier
+		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	protected boolean estComparateur() throws IOException{
+		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent() &&
+		   !precharge.estComparateurInferieur() && !precharge.estComparateurInferieurOuEgal() &&
+		   !precharge.estComparateurSuperieur() && !precharge.estComparateurSuperieurOuEgal()
+		   ){
+			 return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Methode associee a la regle "ExpressionEntiere".
+	 *
+	 * @return true si la regle est satisfaite sinon false.
+	 * @throw IOException si l'analyseur lexical ne parvient pas a lire
+	   l'expression.
+     */
+	protected boolean estExpressionEntiere() throws IOException{
+		// [Additif]
+		if(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			// L'operateur est present : il faut passer au jeton suivant.
+			precharge = lexical.suivant();
+		}
+		// Terme
+		if(!estTerme()){
+			return false;
+		}
+		//{Additif Terme}
+		while(precharge.estOperateurPlus() || precharge.estOperateurMoins()){
+			// Passe l'operateur
+			precharge = lexical.suivant();
+			if(!estTerme()){
+				return false;
+			}
+		}
+		// La regle expressionEntiere est satisfaite
+		return true;
+	}
+	
+	/**
+     * Methode associee a la regle "Terme".
+     *
+     * @return true si la regle est satisfaite sinon false.
+     * @throw IOException si l'analyseur lexical ne parvient pas a lire
+     *   l'expression.
+     */
+	protected boolean estTerme() throws IOException{
+		//Facteur
+		if(!estFacteur()){
+			return false;
+		}
+		//{Multiplicatif Facteur }
+		while(precharge.estOperateurMultiplie() || precharge.estOperateurDivise()){
+			// Passer l'operateur
+			precharge = lexical.suivant();
+			if(!estFacteur()){
+				return false;
+			}
+		}
+		//La regle est satisfaite
+		return true;
+	}
+	
+	 /**
+     * Methode associee a la regle "Facteur".
+     *
+     * @return true si la regle est satisfaite sinon false.
+     * @throw IOException si l'analyseur lexical ne parvient pas a lire
+     *   l'expression.
+     */
+	  protected boolean estFacteur() throws IOException {
+		// Si le jeton precharge est une parenthese ouvrante, il s'agit d'une
+		// nouvelle expression parenthesee.
+		if (precharge.estParentheseOuvrante()) {
+			// Passer la parenthese.
+			precharge = lexical.suivant();
 
+			 // Appel de la methode associee a la regle "Expression".
+			if (!estExpressionEntiere()) {
+				return false;
+			}
+
+			// Le jeton precharge doit etre une parenthese fermante.
+			if (! precharge.estParentheseFermante()) {
+				return false;
+			}
+
+			// Passer la parenthese fermante.
+			precharge = lexical.suivant();
+			// La regle est satisfaite.
+			return true;
+		}
+		
+		// Le jeton precharge est un entier.
+		if (precharge.estEntier()) {
+			    // Passer l'entier.
+			    precharge = lexical.suivant();
+			    // La regle est satisfaite.
+			    return true;
+		}
+		
+		if (faitsDeclaresEntier.containsKey(precharge.lireRepresentation())) {
+		    // Passer le fait
+		    precharge = lexical.suivant();
+		    // La regle est satisfaite.
+		    return true;
+		}
+
+		// Le jeton est inconnu.
+		return false;
+
+	  }
 }
