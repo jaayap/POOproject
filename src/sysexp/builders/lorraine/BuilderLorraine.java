@@ -52,6 +52,8 @@ public class BuilderLorraine implements Builder{
 	protected PremisseEntiereNomFait premisseEntFait;
 	protected PremisseSymboliqueConstante premisseSymboConst;
 	protected PremisseSymboliqueNomFait premisseSymboFait;
+	protected String premisse;
+	protected String conclusion;
 	
 	protected ConclusionBooleeneAffirmation conclusionBoolAffirmation = null;
 	protected ConclusionBooleeneNegation conclusionBoolNegation = null;
@@ -150,8 +152,6 @@ public class BuilderLorraine implements Builder{
 	}
 	
 //Methodes liés a la construction de la base de régles : --------------------------------------------------
-	
-
 	
 	public boolean estBaseDeConnaissance() throws IOException{
 		// Appel de la methode associee aux déclarations.
@@ -359,8 +359,6 @@ public class BuilderLorraine implements Builder{
 		else{
 			return false;
 		}
-
-		
 	}
 	
 	protected boolean estRegle() throws IOException{
@@ -424,7 +422,7 @@ public class BuilderLorraine implements Builder{
 	}
 	
 	protected boolean estConclusion() throws IOException{
-		if(estConclusionBooleene()){
+		if(estConclusionBooleene() || estConclusionSymbolique()){
 			return true;
 		}
 		return false;
@@ -439,12 +437,10 @@ public class BuilderLorraine implements Builder{
 	
 	protected boolean estConclusionBooleeneAffirmation() throws IOException{
 		//Fait_booleen 
-		//Si c'est un fait booleen, on passe au suivant
 		if(faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){
-			
-				conclusionBoolAffirmation = new ConclusionBooleeneAffirmation(precharge.lireRepresentation());
-				precharge = lexical.suivant();
-				return true;
+			conclusionBoolAffirmation = new ConclusionBooleeneAffirmation(precharge.lireRepresentation());
+			precharge = lexical.suivant();
+			return true;
 		}else{
 			return false;
 		}
@@ -455,9 +451,7 @@ public class BuilderLorraine implements Builder{
 		if(!precharge.estNon()){
 			return false;
 		}
-		
-		//Si c'est non fait booleen
-		while(precharge.estNon()){
+		else{
 			precharge = lexical.suivant();
 			if(!faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){
 				return false;
@@ -470,12 +464,85 @@ public class BuilderLorraine implements Builder{
 		return true;
 	}
 	
-	protected boolean estPremisse() throws IOException{
-		if(estPremisseBooleene()){
+	protected boolean estConclusionSymbolique() throws IOException{
+		if(estConclusionSymboliqueConstante() || estConclusionSymboliqueNomFait()){
 			return true;
 		}
 		return false;
 	}
+	
+	protected boolean estConclusionSymboliqueConstante() throws IOException{
+		//Fait_symbolique, fait, contenu dans la hashMap
+		if(precharge.estFait()){
+			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			conclusion = precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}
+		
+		// '=' 
+		if(precharge.estComparateurEgal()){
+			conclusion = " "+precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		//Constante symbolique : jeton fait mais n'est dans aucune hashMap
+				if(precharge.estFait()){
+					if(
+						faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())
+						|| faitsDeclaresEntier.containsKey(precharge.lireRepresentation())
+						|| faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())
+					  ){
+						return false;
+					}
+					//c'est bien une constante
+					conclusion = " "+precharge.lireRepresentation();
+					conclusionSymboConst = new ConclusionSymboliqueConstante(conclusion);
+					precharge = lexical.suivant();
+				}
+		return true;
+	}
+	
+	protected boolean estConclusionSymboliqueNomFait() throws IOException{
+		//Fait_symbolique
+		if(precharge.estFait()){
+			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			conclusion = precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}//c'est bien un fait symbolique
+				
+		// '=' 
+		if(precharge.estComparateurEgal()){
+			conclusion = " "+precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		//Fait_symbolique
+		if(precharge.estFait()){
+			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			conclusion = " "+precharge.lireRepresentation();
+			conclusionSymboFait = new ConclusionSymboliqueNomFait(conclusion);
+			precharge = lexical.suivant();
+		}
+		return true;
+	}
+	
+	protected boolean estPremisse() throws IOException{
+		if(estPremisseBooleene() || estPremisseSymbolique()){
+			return true;
+		}
+		return false;
+	}
+	
 	protected boolean estPremisseBooleene() throws IOException{
 		if(estPremisseBooleeneAffirmation() || estPremisseBooleeneNegation()){
 			return true;
@@ -484,6 +551,7 @@ public class BuilderLorraine implements Builder{
 			return false;
 		}
 	}
+	
 	protected boolean estPremisseBooleeneAffirmation() throws IOException{
 		//Fait_booleen
 		if(faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){ // on vérifie que la chaine de caractere contenu 
@@ -495,8 +563,8 @@ public class BuilderLorraine implements Builder{
 		else{
 			return false;
 		}
-	
 	}
+	
 	protected boolean estPremisseBooleeneNegation() throws IOException{
 		// 'non' Fait_Booleen
 		if(!precharge.estNon()){
@@ -514,6 +582,86 @@ public class BuilderLorraine implements Builder{
 				precharge = lexical.suivant();
 			}
 		}
+		return true;
+	}
+	
+	protected boolean estPremisseSymbolique() throws IOException{
+		if(estPremisseSymboliqueConstante() || estPremisseSymboliqueNomFait()){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	protected boolean estPremisseSymboliqueConstante() throws IOException{
+		//Fait_symbolique, fait, contenu dans la hashMap
+		if(precharge.estFait()){
+			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			premisse = precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}
+		
+		// '=' 
+		if(precharge.estComparateurEgal()){
+			premisse += " "+precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}else{
+			return false;
+		}
+		
+		//Constante symbolique : jeton fait mais n'est dans aucune hashMap
+		if(precharge.estFait()){
+			if(
+				faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())
+				|| faitsDeclaresEntier.containsKey(precharge.lireRepresentation())
+				|| faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())
+			 ){
+				return false;
+			}
+			//c'est bien une constante
+			premisse += " "+precharge.lireRepresentation();
+			premisseSymboConst = new PremisseSymboliqueConstante(premisse);
+			condition.add(premisseSymboFait); // on ajoute la premisse a la liste
+			premisse = "";// on vide la chaine 
+			
+			precharge = lexical.suivant();
+		}
+		return true;
+	}
+	
+	protected boolean estPremisseSymboliqueNomFait() throws IOException{
+		//Fait_symbolique
+		if(precharge.estFait()){
+			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			premisse = precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}//c'est bien un fait symbolique
+				
+		// '/=' 
+		if(precharge.estComparateurDifferent()){
+			premisse+= " "+precharge.lireRepresentation();
+			precharge = lexical.suivant();
+		}
+		else {// ce n'est pzs '/='
+			return false;
+		}
+		
+		//Fait_symbolique
+		if(precharge.estFait()){
+			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
+				return false;
+			}
+			premisse+= " "+precharge.lireRepresentation();
+			premisseSymboFait = new PremisseSymboliqueNomFait(premisse);
+			condition.add(premisseSymboFait);
+			precharge = lexical.suivant();
+		}
+		
 		return true;
 	}
 

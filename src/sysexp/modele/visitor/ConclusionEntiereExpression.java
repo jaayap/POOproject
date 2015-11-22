@@ -4,7 +4,7 @@ import sysexp.modele.ExpressionEntiere;
 import sysexp.modele.FaitEntier;
 /**
  * Correspond partie droite = expression
- * Conclusion de la forme expression = nom_fait
+ * Conclusion de la forme nom_fait =  expression
  * @author Jasmine
  *
  */
