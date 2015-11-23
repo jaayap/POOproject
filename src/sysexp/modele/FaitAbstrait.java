@@ -9,4 +9,5 @@ public interface FaitAbstrait {
 	
 	public String getNomFait();
 	
+	
 }

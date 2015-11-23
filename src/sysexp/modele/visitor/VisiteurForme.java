@@ -1,6 +1,14 @@
 package sysexp.modele.visitor;
 
 public interface VisiteurForme {
+	
+	public void setDernierePremisseVisitee(boolean valeur);
+	
+	public void setDerniereConclusionVisitee(boolean valeur);
+	
+	public boolean getDernierePremisseVisitee();
+	
+	public boolean getDerniereConclusionVisitee();
 
 	void visitPremisseBooleeneAffirmation(PremisseBooleeneAffirmation premisse);
 

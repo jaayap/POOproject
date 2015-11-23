@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import sysexp.builders.Builder;
+import sysexp.modele.FaitAbstrait;
 import sysexp.modele.FaitBooleen;
 import sysexp.modele.FaitEntier;
 import sysexp.modele.FaitSymbolique;
@@ -27,54 +28,113 @@ import sysexp.modele.visitor.PremisseSymboliqueConstante;
 import sysexp.modele.visitor.PremisseSymboliqueNomFait;
 
 /**
- * Cette classe represente le ConcreteBuilder
- * Cette classe doit assurer l'analyse Syntaxique ET sémantique de la base de règles
+ * Cette classe represente le ConcreteBuilder du design pattern builder
+ * Cette classe s'assure de l'analyse Syntaxique ET sémantique de la base de règles
  * Ainsi que la construction de la base de règles
  * @author Jasmine
- *
  */
+
 public class BuilderLorraine implements Builder{
+	 /**
+     * Analyseur lexical.
+     */
 	protected Lexical lexical;
+	
+	/**
+     * Dernier jeton precharge.
+     */
 	protected Jeton precharge;
-	//protected HashMap<String, FaitAbstrait> faitsDeclares = new HashMap<String, FaitAbstrait>();
+	
+	/**
+	 * Declaration des Faits Entiers.
+	 */
 	protected HashMap<String, FaitEntier> faitsDeclaresEntier = new HashMap<String, FaitEntier>();
+	/**
+	 * Declaration des Faits Booleens.
+	 */
 	protected HashMap<String, FaitBooleen> faitsDeclaresBooleen = new HashMap<String, FaitBooleen>();
+	/**
+	 * Declaration des Faits Symboliques.
+	 */
 	protected HashMap<String, FaitSymbolique> faitsDeclaresSymbolique = new HashMap<String, FaitSymbolique>();
 	
-	protected HashMap<String, RegleAbstraite> baseDeRegles = new HashMap<String, RegleAbstraite>();
-	
-	//protected TreeSet<Forme> condition;
+	/**
+	 * Liste des premisses pour les regles
+	 */
 	protected LinkedList<Forme> condition = new LinkedList<Forme>();
 	
+	/**
+	 * 
+	 */
+	protected FaitAbstrait faitAbs;
 	protected PremisseBooleeneAffirmation premisseBoolAffirmation;
 	protected PremisseBooleeneNegation premisseBoolNegation;
 	protected PremisseEntiereExpression premisseEntExp;
 	protected PremisseEntiereNomFait premisseEntFait;
 	protected PremisseSymboliqueConstante premisseSymboConst;
 	protected PremisseSymboliqueNomFait premisseSymboFait;
-	protected String premisse;
-	protected String conclusion;
 	protected String expressionEntiere;
 	
+	/**
+	 * Si la conclusion est une conclusion booleenne affirmative
+	 * on l'enregistre dans cette variable.
+	 */
 	protected ConclusionBooleeneAffirmation conclusionBoolAffirmation = null;
+	/**
+	 * Si la conclusion est une conclusion booleenne de la forme 'non fait_booleen'
+	 * on l'enregistre dans cette variable.
+	 */
 	protected ConclusionBooleeneNegation conclusionBoolNegation = null;
+	/**
+	 * Si la conclusion est une conclusion entiere de la forme 'fait = expression'
+	 * on l'enregistre dans cette variable.
+	 */
 	protected ConclusionEntiereExpression conclusionEntExp = null;
+	/**
+	 * Si la conclusion est une conclusion entiere de la forme 'fait = fait'
+	 * on l'enregistre dans cette variable.
+	 */
 	protected ConclusionEntiereNomFait conclusionEntFait = null;
+	/**
+	 * Si la conclusion est une conclusion symbolique de la forme 'fait = constante'
+	 * on l'enregistre dans cette variable.
+	 */
 	protected ConclusionSymboliqueConstante conclusionSymboConst = null;
+	/**
+	 * Si la conclusion est une conclusion symbolique de la forme 'fait = fait'
+	 * on l'enregistre dans cette variable.
+	 */
 	protected ConclusionSymboliqueNomFait conclusionSymboFait = null;
 	
-	protected RegleAbstraite nouvelleRegle;
+	/**
+	 * représente la base de regle.
+	 */
+	protected RegleAbstraite baseDeRegle;
+	/**
+	 * permet de numéroter les régles
+	 */
 	protected long numeroRegle;
+	/**
+	 * enregistre vrai, si c'est une base de connaissance,
+	 * sinon false.
+	 */
 	public boolean test;
 	
+	/**
+	 * Constructeur logique
+	 * @param lecteur, le fichier qui contient la base de connaissances
+	 */
 	public BuilderLorraine(LineNumberReader lecteur) {
 		this.lexical = new Lexical(lecteur);
+		this.baseDeRegle = null;
 	}
 	
 	public Lexical getlexical(){
 		return lexical;
 	}
+	
 	/**
+	 * Permet de construire la base de regles
 	 * @throws IOException 
 	 */
 	@Override
@@ -85,50 +145,85 @@ public class BuilderLorraine implements Builder{
 		
 	}
 	
+	/**
+	 * Creer une regle sans premisse
+	 */
 	public void nouvelleRegleSansPremisse(){
 		if(conclusionBoolAffirmation != null){
-			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionBoolAffirmation);
+			RegleAbstraite nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionBoolAffirmation);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionBoolNegation != null){
-			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionBoolNegation);
+			RegleAbstraite nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionBoolNegation);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionEntExp != null){
-			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionEntExp);
+			RegleAbstraite nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionEntExp);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionEntFait != null){
-			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionEntFait);
+			RegleAbstraite nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionEntFait);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionSymboConst != null){
-			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionSymboConst);
+			RegleAbstraite nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionSymboConst);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionSymboFait != null){
-			nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionSymboFait);
+			RegleAbstraite nouvelleRegle = new RegleSansPremisse(numeroRegle, conclusionSymboFait);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		numeroRegle++;
 	}
 	
+	/**
+	 * Creer une regle avec premisse
+	 */
 	public void nouvelleRegleAvecPremisse(){
 		if(conclusionBoolAffirmation != null){
-			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolAffirmation);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolAffirmation);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionBoolNegation != null){
-			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolNegation);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolNegation);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionEntExp != null){
-			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntExp);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntExp);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionEntFait != null){
-			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntFait);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntFait);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionSymboConst != null){
-			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboConst);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboConst);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionSymboFait != null){
-			nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboFait);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboFait);
+			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
+			baseDeRegle = nouvelleRegle;
 		}
 		numeroRegle++;
 	}
 	
+	/**
+	 * Remet les variables à null
+	 * et vide la HashMap qui contient les Premisses.
+	 * Cette méthode est executer après l'ajout d'une regle.
+	 */
 	public void viderVariable() {
 		condition.clear();
 		conclusionBoolAffirmation = null;
@@ -139,23 +234,21 @@ public class BuilderLorraine implements Builder{
 		conclusionSymboFait = null;
 	}
 	
-	/**
-	 * retourne les faits déclarés
+	/** 
+	 * Accesseur.
+	 * @return Le produit fini, soit la base de regles
 	 */
-	public HashMap<String,FaitEntier> getFaitsDeclaresEntier(){
-		return faitsDeclaresEntier;
-	}
-	
-	/**
-	 * 
-	 * @return Le produit fini soit la base de regles
-	 */
-	public HashMap<String, RegleAbstraite> getBaseDeRegles(){
-		return baseDeRegles;
+	public  RegleAbstraite getBaseDeRegles(){
+		return baseDeRegle;
 	}
 	
 //Methodes liés a la construction de la base de régles : --------------------------------------------------
-	
+	/**
+	 * Test si c'est une base de connaissances ou non
+	 * @return true, si c'est bien une base de connaissance dans la grammaire Lorraine,
+	 * false sinon.
+	 * @throws IOException
+	 */
 	public boolean estBaseDeConnaissance() throws IOException{
 		// Appel de la methode associee aux déclarations.
 		while(!precharge.estFinExpression()){
@@ -168,7 +261,12 @@ public class BuilderLorraine implements Builder{
 	}
 
 //Vérification syntaxique et sémantique des déclarations :
-	
+	/**
+	 * Test si c'est une déclaration de faits
+	 * @return <b>true</b> : c'est une déclaration.  <br/>
+	 * <b>false</b> : ce n'est pas une déclaration.
+	 * @throws IOException
+	 */
 	protected boolean estDeclaration() throws IOException {
 		// C'est une déclaration si c'est
 		// une declaration_booleene ou une declatation_symbolique ou une declaration_entiere
@@ -178,7 +276,12 @@ public class BuilderLorraine implements Builder{
 		// Sinon ce n'est pas une déclaration
 		return false;
 	}
-
+	/**
+	 * Test si c'est une déclaration de faits booleens
+	 * @return <b>true</b> : c'est une déclaration de faits booleens.  <br/>
+	 * <b>false</b> : ce n'est pas une déclaration de faits booleens.
+	 * @throws IOException
+	 */
 	protected boolean estDeclarationBooleene() throws IOException {
 		// 'faits_booleens' : mot clé
 		if (precharge.estFaits_Booleens()) { // On test si c'est bien le jeton 'faits_booleens'
@@ -206,6 +309,12 @@ public class BuilderLorraine implements Builder{
 		return true;//tout les tests ont réussis
 	}
 	
+	/**
+	 * Test si c'est une liste de faits booleens.
+	 * @return <b>true</b> : c'est une liste de faits booleens, syntaxiquement correcte. </br>
+	 * <b>false</b> : ce n'est pas une liste de faits booleens, ou elle contient une erreur de syntaxe.
+	 * @throws IOException
+	 */
 	protected boolean estFaitsBooleens() throws IOException {// Test si l'on a bien une
 																// liste de faits booleens
 		// Fait_Booleen
@@ -236,7 +345,12 @@ public class BuilderLorraine implements Builder{
 		}
 		return true;
 	}
-	
+	/**
+	 * Test si c'est une déclaration de faits symboliques.
+	 * @return <b>true</b> : c'est une déclaration de faits symboliques.  <br/>
+	 * <b>false</b> : ce n'est pas une déclaration de faits symboliques.
+	 * @throws IOException
+	 */
 	protected boolean estDeclarationSymbolique() throws IOException{
 		// 'faits_symboliques'  : mot clé
 		if(precharge.estFaits_Symboliques()){//jeton 'faits_symboliques'
@@ -262,6 +376,13 @@ public class BuilderLorraine implements Builder{
 		}
 		return true;
 	}
+	
+	/**
+	 * Test si c'est une liste de faits symboliques.
+	 * @return <b>true</b> : c'est une liste de faits symboliques, syntaxiquement correcte. </br>
+	 * <b>false</b> : ce n'est pas une liste de faits symboliques, ou elle contient une erreur de syntaxe.
+	 * @throws IOException
+	 */
 	protected boolean estFaitsSymboliques() throws IOException{
 		//Fait_Symbolique
 		if(!precharge.estFait()){
@@ -291,6 +412,13 @@ public class BuilderLorraine implements Builder{
 		}
 		return true;
 	}
+	
+	/**
+	 * Test si c'est une déclaration de faits entiers.
+	 * @return <b>true</b> : c'est une déclaration de faits entiers.  <br/>
+	 * <b>false</b> : ce n'est pas une déclaration de faits entiers.
+	 * @throws IOException
+	 */
 	protected boolean estDeclarationEntiere() throws IOException{
 		// 'faits_entiers' : mot clé
 		if(precharge.estFaits_Entiers()){
@@ -316,6 +444,12 @@ public class BuilderLorraine implements Builder{
 		}
 		return true;
 	}
+	/**
+	 * Test si c'est une liste de faits entiers.
+	 * @return <b>true</b> : c'est une liste de faits entiers, syntaxiquement correcte. </br>
+	 * <b>false</b> : ce n'est pas une liste de faits entiers, ou elle contient une erreur de syntaxe.
+	 * @throws IOException
+	 */
 	protected boolean estFaitsEntiers() throws IOException{
 		//Fait_Entier
 		if(!precharge.estFait()){
@@ -348,6 +482,12 @@ public class BuilderLorraine implements Builder{
 	
 //Vérification syntaxique et sémantique des règles : 
 	
+	/**
+	 * Test si l'on est face à une liste de regles
+	 * @return <b>true</b> : c'est une liste de regles </br>
+	 * <b>false</b> : ce n'est pas une liste de regles
+	 * @throws IOException
+	 */
 	protected boolean estRegles() throws IOException{
 		//{ Regle ';' }
 		if (estRegle()){
@@ -364,13 +504,26 @@ public class BuilderLorraine implements Builder{
 		}
 	}
 	
+
+	/**
+	 * Test si l'on est face à une regle
+	 * @return <b>true</b> : c'est une regle </br>
+	 * <b>false</b> : ce n'est pas une regle
+	 * @throws IOException
+	 */
 	protected boolean estRegle() throws IOException{
 		if(estRegleSansPremisse() || estRegleAvecPremisses()){
 			return true;
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Test si l'on est face à une regle sans premisse
+	 * @return <b>true</b> : c'est une regle sans premisse </br>
+	 * <b>false</b> : ce n'est pas une regle sans premisse
+	 * @throws IOException
+	 */
 	protected boolean estRegleSansPremisse() throws IOException{
 		if(estConclusion()){
 			nouvelleRegleSansPremisse();
@@ -379,7 +532,13 @@ public class BuilderLorraine implements Builder{
 		}
 		return false;
 	}
-	 
+	
+	/**
+	 * Test si l'on est face à une regle avec premisse
+	 * @return <b>true</b> : c'est une regle avec premisse </br>
+	 * <b>false</b> : ce n'est pas une regle avec premisse
+	 * @throws IOException
+	 */
 	protected boolean estRegleAvecPremisses() throws IOException{
 		//'si'
 		if(precharge.estSi()){
@@ -408,6 +567,12 @@ public class BuilderLorraine implements Builder{
 		return true;
 	}
 	
+	/**
+	 * Test si c'est une condition, soit une liste de prémisse.
+	 * @return <b>true</b> : c'est une condition. </br>
+	 * <b>false</b> : ce n'est pas une condition.
+	 * @throws IOException
+	 */
 	protected boolean estCondition() throws IOException{
 		//Premisse
 		if(!estPremisse()){
@@ -424,6 +589,12 @@ public class BuilderLorraine implements Builder{
 		return true;
 	}
 	
+	/**
+	 * Test si c'est une conclusion.
+	 * @return <b>true</b> : c'est une conclusion. </br>
+	 * <b>false</b> : ce n'est pas une conclusion.
+	 * @throws IOException
+	 */
 	protected boolean estConclusion() throws IOException{
 		if(estConclusionBooleene() || estConclusionSymbolique() || estConclusionEntiere()){
 			return true;
@@ -431,6 +602,12 @@ public class BuilderLorraine implements Builder{
 		return false;
 	}
 	
+	/**
+	 * Test si c'est une conclusion booleene.
+	 * @return <b>true</b> : c'est une conclusion booleene. </br>
+	 * <b>false</b> : ce n'est pas une conclusion booleene.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionBooleene() throws IOException{
 		if(estConclusionBooleeneAffirmation() || estConclusionBooleeneNegation()){
 			return true;
@@ -438,10 +615,16 @@ public class BuilderLorraine implements Builder{
 		return false;
 	}
 	
+	/**
+	 * Test si c'est une conclusion booleene de la forme 'fait_booleen'.
+	 * @return <b>true</b> : c'est une conclusion booleene. </br>
+	 * <b>false</b> : ce n'est pas une conclusion booleene.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionBooleeneAffirmation() throws IOException{
 		//Fait_booleen 
 		if(faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){
-			conclusionBoolAffirmation = new ConclusionBooleeneAffirmation(precharge.lireRepresentation());
+			conclusionBoolAffirmation = new ConclusionBooleeneAffirmation(new FaitBooleen(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 			return true;
 		}else{
@@ -449,6 +632,12 @@ public class BuilderLorraine implements Builder{
 		}
 	}
 	
+	/**
+	 * Test si c'est une conclusion booleene de la forme 'non fait_booleen'.
+	 * @return <b>true</b> : c'est une conclusion booleene. </br>
+	 * <b>false</b> : ce n'est pas une conclusion booleene.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionBooleeneNegation() throws IOException{
 		//'non' Fait_Booleen
 		if(!precharge.estNon()){
@@ -460,13 +649,19 @@ public class BuilderLorraine implements Builder{
 				return false;
 			}
 			else{
-				conclusionBoolNegation = new ConclusionBooleeneNegation(precharge.lireRepresentation());
+				conclusionBoolNegation = new ConclusionBooleeneNegation(new FaitBooleen(precharge.lireRepresentation()));
 				precharge = lexical.suivant();
 			}
 		}
 		return true;
 	}
 	
+	/**
+	 * Test si c'est une conclusion symbolique.
+	 * @return <b>true</b> : c'est une conclusion symbolique. </br>
+	 * <b>false</b> : ce n'est pas une conclusion symbolique.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionSymbolique() throws IOException{
 		if(estConclusionSymboliqueConstante() || estConclusionSymboliqueNomFait()){
 			return true;
@@ -474,19 +669,24 @@ public class BuilderLorraine implements Builder{
 		return false;
 	}
 	
+	/**
+	 * Test si c'est une conclusion symbolique de la forme 'fait_symbolique = constante'.
+	 * @return <b>true</b> : c'est une conclusion symbolique. </br>
+	 * <b>false</b> : ce n'est pas une conclusion symbolique.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionSymboliqueConstante() throws IOException{
 		//Fait_symbolique, fait, contenu dans la hashMap
 		if(precharge.estFait()){
 			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			conclusion = precharge.lireRepresentation();
+			faitAbs = new FaitSymbolique(precharge.lireRepresentation());
 			precharge = lexical.suivant();
 		}
 		
 		// '=' 
 		if(precharge.estComparateurEgal()){
-			conclusion = " "+precharge.lireRepresentation();
 			precharge = lexical.suivant();
 		}else{
 			return false;
@@ -502,27 +702,30 @@ public class BuilderLorraine implements Builder{
 				return false;
 			}
 			//c'est bien une constante
-			conclusion = " "+precharge.lireRepresentation();
-			conclusionSymboConst = new ConclusionSymboliqueConstante(conclusion);
-			//Verifier s'il faut vider la chaine condition ou pas; je ne pense pas
+			conclusionSymboConst = new ConclusionSymboliqueConstante((FaitSymbolique)faitAbs,"=", precharge.lireRepresentation());
 			precharge = lexical.suivant();
 		}
 		return true;
 	}
 	
+	/**
+	 * Test si c'est une conclusion symbolique de la forme 'fait_symbolique = fait'.
+	 * @return <b>true</b> : c'est une conclusion symbolique. </br>
+	 * <b>false</b> : ce n'est pas une conclusion symbolique.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionSymboliqueNomFait() throws IOException{
 		//Fait_symbolique
 		if(precharge.estFait()){
 			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			conclusion = precharge.lireRepresentation();
+			faitAbs = new FaitSymbolique(precharge.lireRepresentation());
 			precharge = lexical.suivant();
 		}//c'est bien un fait symbolique
 				
 		// '=' 
 		if(precharge.estComparateurEgal()){
-			conclusion = " "+precharge.lireRepresentation();
 			precharge = lexical.suivant();
 		}else{
 			return false;
@@ -533,13 +736,19 @@ public class BuilderLorraine implements Builder{
 			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			conclusion = " "+precharge.lireRepresentation();
-			conclusionSymboFait = new ConclusionSymboliqueNomFait(conclusion);
+			
+			conclusionSymboFait = new ConclusionSymboliqueNomFait((FaitSymbolique) faitAbs,"=",new FaitSymbolique(precharge.lireRepresentation()));
 			precharge = lexical.suivant();
 		}
 		return true;
 	}
 	
+	/**
+	 * Test si c'est une conclusion entiere.
+	 * @return <b>true</b> : c'est une conclusion entiere. </br>
+	 * <b>false</b> : ce n'est pas une conclusion entiere.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionEntiere() throws IOException{
 		if(estConclusionEntiereExpression() || estConclusionEntiereNomFait()){
 			return true;
@@ -547,6 +756,12 @@ public class BuilderLorraine implements Builder{
 		return false;
 	}
 	
+	/**
+	 * Test si c'est une conclusion entiere de la forme 'fait_entier = expression'.
+	 * @return <b>true</b> : c'est une conclusion entiere. </br>
+	 * <b>false</b> : ce n'est pas une conclusion entiere.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionEntiereExpression() throws IOException{
 		//Fait_entier
 		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
@@ -570,6 +785,12 @@ public class BuilderLorraine implements Builder{
 		return true;
 	}
 	
+	/**
+	 * Test si c'est une conclusion entiere de la forme 'fait_entier = fait'.
+	 * @return <b>true</b> : c'est une conclusion entiere. </br>
+	 * <b>false</b> : ce n'est pas une conclusion entiere.
+	 * @throws IOException
+	 */
 	protected boolean estConclusionEntiereNomFait() throws IOException{
 		//Fait_entier
 		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
@@ -615,7 +836,7 @@ public class BuilderLorraine implements Builder{
 	protected boolean estPremisseBooleeneAffirmation() throws IOException{
 		//Fait_booleen
 		if(faitsDeclaresBooleen.containsKey(precharge.lireRepresentation())){ // on vérifie que la chaine de caractere contenu 
-			premisseBoolAffirmation = new PremisseBooleeneAffirmation(precharge.lireRepresentation());
+			premisseBoolAffirmation = new PremisseBooleeneAffirmation(new FaitBooleen(precharge.lireRepresentation()));
 			condition.add(premisseBoolAffirmation);
 			precharge = lexical.suivant();
 			return true;
@@ -637,7 +858,7 @@ public class BuilderLorraine implements Builder{
 				return false;
 			}
 			else{
-				premisseBoolNegation = new PremisseBooleeneNegation(precharge.lireRepresentation());
+				premisseBoolNegation = new PremisseBooleeneNegation(new FaitBooleen(precharge.lireRepresentation()));
 				condition.add(premisseBoolNegation);	
 				precharge = lexical.suivant();
 			}
@@ -660,13 +881,12 @@ public class BuilderLorraine implements Builder{
 			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			premisse = precharge.lireRepresentation();
+			faitAbs = new FaitSymbolique(precharge.lireRepresentation());
 			precharge = lexical.suivant();
 		}
 		
 		// '=' 
 		if(precharge.estComparateurEgal()){
-			premisse += " "+precharge.lireRepresentation();
 			precharge = lexical.suivant();
 		}else{
 			return false;
@@ -682,10 +902,8 @@ public class BuilderLorraine implements Builder{
 				return false;
 			}
 			//c'est bien une constante
-			premisse += " "+precharge.lireRepresentation();
-			premisseSymboConst = new PremisseSymboliqueConstante(premisse);
+			premisseSymboConst = new PremisseSymboliqueConstante((FaitSymbolique) faitAbs, "=", precharge.lireRepresentation());
 			condition.add(premisseSymboFait); // on ajoute la premisse a la liste
-			premisse = "";// on vide la chaine 
 			precharge = lexical.suivant();
 		}
 		return true;
@@ -697,13 +915,12 @@ public class BuilderLorraine implements Builder{
 			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			premisse = precharge.lireRepresentation();
+			faitAbs = new FaitSymbolique(precharge.lireRepresentation());
 			precharge = lexical.suivant();
 		}//c'est bien un fait symbolique
 				
 		// '/=' 
 		if(precharge.estComparateurDifferent()){
-			premisse+= " "+precharge.lireRepresentation();
 			precharge = lexical.suivant();
 		}
 		else {// ce n'est pzs '/='
@@ -715,10 +932,7 @@ public class BuilderLorraine implements Builder{
 			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
-			premisse+= " "+precharge.lireRepresentation();
-			premisseSymboFait = new PremisseSymboliqueNomFait(premisse);
-			condition.add(premisseSymboFait);
-			premisse = "";// on vide la chaine 
+			condition.add(new PremisseSymboliqueNomFait((FaitSymbolique) faitAbs, "/=", new FaitSymbolique(precharge.lireRepresentation())));
 			precharge = lexical.suivant();
 		}
 		
@@ -735,6 +949,7 @@ public class BuilderLorraine implements Builder{
 	protected boolean estPremisseEntiereExpression() throws IOException{
 		//Fait_entier
 		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			//on passe le fait
 			precharge = lexical.suivant();
 		}else{
 			return false;
@@ -742,6 +957,7 @@ public class BuilderLorraine implements Builder{
 		
 		// Comparateur
 		if(estComparateur()){
+			//on passe le comparateur
 			precharge = lexical.suivant();
 		}
 		else{
@@ -758,6 +974,7 @@ public class BuilderLorraine implements Builder{
 	protected boolean estPremisseEntiereNomFait() throws IOException{
 		//Fait_entier
 		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			//on passe le fait
 			precharge = lexical.suivant();
 		}else{
 			return false;
@@ -765,6 +982,7 @@ public class BuilderLorraine implements Builder{
 		
 		// Comparateur
 		if(estComparateur()){
+			//on passe le comparateur
 			precharge = lexical.suivant();
 		}
 		else{
@@ -773,6 +991,7 @@ public class BuilderLorraine implements Builder{
 		
 		//Fait_entier
 		if(faitsDeclaresEntier.containsKey(precharge.lireRepresentation())){
+			//on passe le fait
 			precharge = lexical.suivant();
 		}else{
 			return false;
@@ -780,7 +999,11 @@ public class BuilderLorraine implements Builder{
 		
 		return true;
 	}
-	
+	/**
+	 * Test si le jeton est un comparateur
+	 * @return
+	 * @throws IOException
+	 */
 	protected boolean estComparateur() throws IOException{
 		if(!precharge.estComparateurEgal() && !precharge.estComparateurDifferent() &&
 		   !precharge.estComparateurInferieur() && !precharge.estComparateurInferieurOuEgal() &&

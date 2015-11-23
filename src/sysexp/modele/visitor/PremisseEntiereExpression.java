@@ -11,11 +11,13 @@ import sysexp.modele.OperateurBinaire;
  *
  */
 public class PremisseEntiereExpression implements Forme{
-	protected ExpressionEntiere expression;
 	protected FaitEntier fait;
-	protected OperateurBinaire comparateur;// '=' '>' '<'
+	protected String comparateur;// '=' '>' '<'
+	protected ExpressionEntiere expression;
 	
-	public PremisseEntiereExpression(ExpressionEntiere expression,FaitEntier fait, OperateurBinaire comparateur){
+
+	
+	public PremisseEntiereExpression(ExpressionEntiere expression,FaitEntier fait, String comparateur){
 		this.expression = expression;
 		this.fait = fait;
 		this.comparateur = comparateur;
@@ -24,6 +26,18 @@ public class PremisseEntiereExpression implements Forme{
 	@Override
 	public void accept(VisiteurForme visiteur) {
 		visiteur.visitPremisseEntiereExpression(this);
+	}
+	@Override
+	public String getNomFait() {
+		return fait.getNomFait();
+	}
+	
+	public String getComparateur(){
+		return comparateur;
+	}
+	
+	public ExpressionEntiere getExpression(){
+		return expression;
 	}
 
 }

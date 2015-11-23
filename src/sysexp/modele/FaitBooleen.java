@@ -9,17 +9,23 @@ public class FaitBooleen implements FaitAbstrait{
 		this.nom = nom;
 		this.valeur = valeur;
 	}
+	
 	public FaitBooleen(String nom){
 		this.nom = nom;
 	}
 	
-	public boolean valeur(){
+	public boolean getValeur(){
 		return valeur;
 	}
 	
 	@Override
 	public String getNomFait() {
 		return nom;
+	}
+
+	public void setValeur(boolean valeur) {
+		this.valeur = valeur;
+		
 	}
 
 }

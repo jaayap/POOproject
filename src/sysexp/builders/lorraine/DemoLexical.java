@@ -1,9 +1,9 @@
 package sysexp.builders.lorraine;
 
-import java.io.LineNumberReader;
-import java.io.FileReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 
 /**
  * Classe representant le programme de demonstration de la classe Lexical.

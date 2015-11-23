@@ -11,10 +11,25 @@ import sysexp.modele.FaitEntier;
 public class ConclusionEntiereExpression implements Forme {
 	protected FaitEntier fait_entier;
 	protected ExpressionEntiere expression;
+	protected String comparateur;
 	
-	public ConclusionEntiereExpression(FaitEntier fait, ExpressionEntiere expression){
+	public ConclusionEntiereExpression(FaitEntier fait,String comparateur, ExpressionEntiere expression){
 		this.fait_entier = fait;
+		this.comparateur = comparateur;
 		this.expression = expression;
+	}
+	
+	@Override
+	public String getNomFait(){
+		return fait_entier.getNomFait();
+	}
+
+	public String getComparateur(){
+		return comparateur;
+	}
+	
+	public ExpressionEntiere getExpression(){
+		return expression;
 	}
 	
 	@Override

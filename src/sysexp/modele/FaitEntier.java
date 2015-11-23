@@ -16,13 +16,17 @@ public class FaitEntier implements FaitAbstrait,ExpressionEntiere {
 		this.nom = nom;
 	}
 	
-	public long valeur(){
+	public long getValeur(){
 		return valeur;
 	}
 
 	@Override
 	public String getNomFait() {
 		return nom;
+	}
+	
+	public void setValeur(long valeur){
+		this.valeur = valeur;
 	}
 	
 	@Override
