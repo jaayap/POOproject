@@ -186,33 +186,37 @@ public class BuilderLorraine implements Builder{
 	 * Creer une regle avec premisse
 	 */
 	public void nouvelleRegleAvecPremisse(){
+		LinkedList<Forme> clone = (LinkedList<Forme>) condition.clone();
+		condition.clear();
+		
 		if(conclusionBoolAffirmation != null){
-			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolAffirmation);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, clone, conclusionBoolAffirmation);
 			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
 			baseDeRegle = nouvelleRegle;
+			
 		}
 		if(conclusionBoolNegation != null){
-			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionBoolNegation);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, clone, conclusionBoolNegation);
 			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
 			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionEntExp != null){
-			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntExp);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, clone, conclusionEntExp);
 			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
 			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionEntFait != null){
-			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionEntFait);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, clone, conclusionEntFait);
 			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
 			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionSymboConst != null){
-			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboConst);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, clone, conclusionSymboConst);
 			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
 			baseDeRegle = nouvelleRegle;
 		}
 		if(conclusionSymboFait != null){
-			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, condition, conclusionSymboFait);
+			RegleAbstraite nouvelleRegle = new RegleAvecPremisse(numeroRegle, clone, conclusionSymboFait);
 			nouvelleRegle.ecrireSuccesseur(baseDeRegle);
 			baseDeRegle = nouvelleRegle;
 		}
@@ -225,7 +229,14 @@ public class BuilderLorraine implements Builder{
 	 * Cette méthode est executer après l'ajout d'une regle.
 	 */
 	public void viderVariable() {
-		condition.clear();
+	/*	if(!condition.isEmpty()){
+		condition.remove();
+		}
+		 for (int i = 0; i < condition.size(); i++){
+			 condition.get(i);
+		 }*/
+		       
+	   
 		conclusionBoolAffirmation = null;
 		conclusionBoolNegation = null;
 		conclusionEntExp = null;
@@ -903,7 +914,7 @@ public class BuilderLorraine implements Builder{
 			}
 			//c'est bien une constante
 			premisseSymboConst = new PremisseSymboliqueConstante((FaitSymbolique) faitAbs, "=", precharge.lireRepresentation());
-			condition.add(premisseSymboFait); // on ajoute la premisse a la liste
+			condition.add(premisseSymboConst); // on ajoute la premisse a la liste
 			precharge = lexical.suivant();
 		}
 		return true;
@@ -923,7 +934,7 @@ public class BuilderLorraine implements Builder{
 		if(precharge.estComparateurDifferent()){
 			precharge = lexical.suivant();
 		}
-		else {// ce n'est pzs '/='
+		else {// ce n'est pas '/='
 			return false;
 		}
 		
@@ -932,6 +943,7 @@ public class BuilderLorraine implements Builder{
 			if(!faitsDeclaresSymbolique.containsKey(precharge.lireRepresentation())){
 				return false;
 			}
+			
 			condition.add(new PremisseSymboliqueNomFait((FaitSymbolique) faitAbs, "/=", new FaitSymbolique(precharge.lireRepresentation())));
 			precharge = lexical.suivant();
 		}

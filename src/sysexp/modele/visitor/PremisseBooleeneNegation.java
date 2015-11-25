@@ -22,5 +22,9 @@ public class PremisseBooleeneNegation implements Forme {
 	public String getNomFait() {
 		return conclusion.getNomFait();
 	}
+	
+	public String toString(){
+		return "non"+conclusion.getNomFait();
+	}
 
 }

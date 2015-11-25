@@ -36,5 +36,8 @@ public class FaitEntier implements FaitAbstrait,ExpressionEntiere {
 			}
 			return valeur;
 		}
-
+	
+	public String toString(){
+		return valeur+" ";
+	}
 }

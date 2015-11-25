@@ -27,12 +27,15 @@ public class RegleSansPremisse extends RegleAbstraite{
     	}
 		
     //	if(this.possedeSuccesseur() == true){
-    	if(suivante!=null){ 
+    	if(suivante!=null){
     		flag2 = suivante.iterer(baseDeFait);
     	}
 		return flag || flag2;
 	}
-
+	
+	public String toString(){
+		return ""+ conclusion;
+	}
 	@Override
 	public boolean estDeclenchee() {
 		return regledeclenchee;
@@ -44,10 +47,14 @@ public class RegleSansPremisse extends RegleAbstraite{
 	}
 
 	public boolean estDeclenchable(VisiteurForme visiteur) {
+	
 		//une regle sans prémisse est toujours déclenchable sauf si elle a été déclenché
-		if(regledeclenchee && visiteur.getDerniereConclusionVisitee()== true){
+		if(regledeclenchee){
 			return false;
 		}
+	/*	if(regledeclenchee && visiteur.getDerniereConclusionVisitee()== true){
+			return false;
+		}*/
 		else {
 			return true;
 		}

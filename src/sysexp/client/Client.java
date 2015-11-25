@@ -9,6 +9,7 @@ import java.util.HashMap;
 import sysexp.builders.Director;
 import sysexp.builders.lorraine.BuilderLorraine;
 import sysexp.modele.FaitAbstrait;
+import sysexp.modele.FaitBooleen;
 import sysexp.modele.RegleAbstraite;
 
 /**
@@ -63,13 +64,13 @@ public class Client {
 			    System.out.println("Expression correcte.");
 			    //Etape 1 fini :
 			    //Etape 2. moteur d'inférence
-			  
 			    baseDeRegles = builder.getBaseDeRegles();//on recupere la base de regle
 			    if(baseDeRegles != null){
-			    	baseDeRegles.iterer(baseDeFaits);
+			    	while(baseDeRegles.iterer(baseDeFaits));
 			    }
 			    //Etape 3. Ecrire le contenu de la base de fait sur la sortie standart
-			    System.out.println("Base de Fait : \n"+ baseDeFaits);
+			    System.out.println("Base de Fait : \n"+ baseDeFaits.toString());
+			 
 			    return;
 			}else{
 				System.out.println("expression incorrect");

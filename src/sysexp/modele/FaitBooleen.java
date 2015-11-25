@@ -27,5 +27,9 @@ public class FaitBooleen implements FaitAbstrait{
 		this.valeur = valeur;
 		
 	}
-
+	
+	@Override
+	public String toString(){
+		return  valeur+" ";
+	}
 }

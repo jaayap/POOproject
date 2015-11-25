@@ -12,7 +12,10 @@ public class PremisseSymboliqueNomFait implements Forme {
 		this.comparateur = comparateur;
 		this.valeur = valeur;
 	}
-	
+	public String toString(){
+		return fait.getNomFait()+" "+comparateur+" "+valeur.getNomFait();
+	}
+
 	@Override
 	public void accept(VisiteurForme visiteur) {
 		visiteur.visitPremisseSymboliqueNomFait(this);

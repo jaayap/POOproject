@@ -27,4 +27,9 @@ public class FaitSymbolique implements FaitAbstrait {
 	public void setValeur(String valeur){
 		this.valeur = valeur;
 	}
+	
+	@Override
+	public String toString(){
+		return valeur;
+	}
 }

@@ -30,5 +30,9 @@ public class PremisseSymboliqueConstante implements Forme{
 	public String getComparateur(){
 		return comparateur;
 	}
+	
+	public String toString(){
+		return fait.getNomFait()+" "+comparateur+" "+constante;
+	}
 
 }

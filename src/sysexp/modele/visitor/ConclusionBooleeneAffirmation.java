@@ -18,5 +18,8 @@ public class ConclusionBooleeneAffirmation implements Forme {
 	public void accept(VisiteurForme visiteur) {
 		visiteur.visitConclusionBooleeneAffirmation(this);
 	}
+	public String toString(){
+		return conclusion.getNomFait();
+	}
 
 }

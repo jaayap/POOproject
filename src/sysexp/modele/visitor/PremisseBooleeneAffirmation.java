@@ -17,5 +17,8 @@ public class PremisseBooleeneAffirmation implements Forme {
 	public String getNomFait() {
 		return conclusion.getNomFait();
 	}
+	public String toString(){
+		return conclusion.getNomFait();
+	}
 
 }

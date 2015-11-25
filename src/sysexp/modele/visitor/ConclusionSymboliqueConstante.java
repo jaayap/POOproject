@@ -30,6 +30,9 @@ public class ConclusionSymboliqueConstante implements Forme {
 		visiteur.visitConclusionSymboliqueConstante(this);
 	}
 
-	
+	public String toString(){
+		return nomConstante;
+	}
+
 
 }

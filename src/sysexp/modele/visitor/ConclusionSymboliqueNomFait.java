@@ -30,6 +30,9 @@ public class ConclusionSymboliqueNomFait implements Forme {
 	public void accept(VisiteurForme visiteur) {
 		visiteur.visitConclusionSymboliqueNomFait(this);
 	}
+	public String toString(){
+		return valeur.getNomFait();
+	}
 
 
 }

@@ -39,8 +39,6 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 		return false;
 	}
 	
-	
-
 	@Override
 	public void visitPremisseBooleeneAffirmation(PremisseBooleeneAffirmation premisse) {
 		if(baseDeFaits.containsKey(premisse.getNomFait())){ //Si la base contient le fait
@@ -75,7 +73,8 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 	public void visitPremisseSymboliqueConstante(PremisseSymboliqueConstante premisse) {
 		if(baseDeFaits.containsKey(premisse.getNomFait())){ //Si la base contient le fait
 			FaitSymbolique fait = (FaitSymbolique) baseDeFaits.get(premisse.getNomFait());
-			if(fait.getValeur() == premisse.getValeur()){ //le fait possède la valeur qu'on souhaite
+			
+			if(fait.getValeur().equals(premisse.getValeur())){ //le fait possède la valeur qu'on souhaite
 				dernierePremisseVisitee = true;
 			}else{//Le fait est dans la base mais n'est pas égal a notre constante
 				dernierePremisseVisitee = false;
@@ -92,7 +91,7 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 		if(baseDeFaits.containsKey(premisse.getNomFait())){ //Si la base contient le fait1 dans la base
 			if(baseDeFaits.containsKey(premisse.getValeur())){// Fait2 dans la base
 			FaitSymbolique fait = (FaitSymbolique) baseDeFaits.get(premisse.getNomFait());
-			if(fait.getValeur() == premisse.getValeur()){ //le fait doit être différent de notre fait
+			if(fait.getValeur().equals(premisse.getValeur())){ //le fait doit être différent de notre fait
 				dernierePremisseVisitee = false;
 			}else{//Le fait est dans la base mais n'a pas la meme valeur.
 				dernierePremisseVisitee = true;
@@ -122,7 +121,6 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 
 	@Override
 	public void visitConclusionBooleeneAffirmation(ConclusionBooleeneAffirmation conclusion) {
-		System.out.println("conclubool A");
 		if(baseDeFaits.containsKey(conclusion.getNomFait())){ //Si la base contient déja le fait
 			//on doit tester s'il on la meme valeur pour les booleenS ?
 			derniereConclusionVisitee = false;
@@ -136,7 +134,6 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 	
 	@Override
 	public void visitConclusionBooleeneNegation(ConclusionBooleeneNegation conclusion) {
-		System.out.println("conclubool N");
 		if(baseDeFaits.containsKey(conclusion.getNomFait())){ //Si la base contient déja le fait
 			derniereConclusionVisitee = false;
 		}
@@ -152,18 +149,19 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 		if(baseDeFaits.containsKey(conclusion.getNomFait())){ //Si la base contient déja le fait
 			//on doit tester si le fait de la base à la meme valeur que la conclusion
 			FaitSymbolique valeurDansLaBase = (FaitSymbolique) baseDeFaits.get(conclusion.getNomFait());
-			if(conclusion.getValeur() == valeurDansLaBase.getValeur()){
-				dernierePremisseVisitee = false;
+			if(conclusion.getValeur().equals(valeurDansLaBase.getValeur())){
+				derniereConclusionVisitee = false;
 			}
 			else{// on doit mettre a jour le fait
 		//	valeurDansLaBase.setValeur(conclusion.getValeur());
 			baseDeFaits.remove(conclusion.getNomFait());
 			baseDeFaits.put(conclusion.getNomFait(), new FaitSymbolique(conclusion.getNomFait(), conclusion.getValeur()));
-			dernierePremisseVisitee = true;
+			derniereConclusionVisitee = true;
 			}
 		}
 		else{
-			baseDeFaits.put(conclusion.getNomFait(), new FaitSymbolique(conclusion.getNomFait(), conclusion.getValeur())); 			dernierePremisseVisitee = true;
+			baseDeFaits.put(conclusion.getNomFait(), new FaitSymbolique(conclusion.getNomFait(), conclusion.getValeur()));
+			derniereConclusionVisitee = true;
 		}
 		
 	}
@@ -173,18 +171,19 @@ public class VisiteurFormeMoteur implements VisiteurForme {
 		if(baseDeFaits.containsKey(conclusion.getNomFait())){ //Si la base contient déja le fait
 			//on doit tester si le fait de la base à la meme valeur que la conclusion
 			FaitSymbolique valeurDansLaBase = (FaitSymbolique) baseDeFaits.get(conclusion.getNomFait());
-			if(conclusion.getValeur() == valeurDansLaBase.getValeur()){
-				dernierePremisseVisitee = false;
+			if(conclusion.getValeur().equals(valeurDansLaBase.getValeur())){
+				derniereConclusionVisitee = false;
 			}
 			else{// on doit mettre a jour le fait
 		//	valeurDansLaBase.setValeur(conclusion.getValeur());
 			baseDeFaits.remove(conclusion.getNomFait());
 			baseDeFaits.put(conclusion.getNomFait(), new FaitSymbolique(conclusion.getNomFait(), conclusion.getValeur()));
-			dernierePremisseVisitee = true;
+			derniereConclusionVisitee = true;
 			}
 		}
 		else{
-			baseDeFaits.put(conclusion.getNomFait(), new FaitSymbolique(conclusion.getNomFait(), conclusion.getValeur())); 			dernierePremisseVisitee = true;
+			baseDeFaits.put(conclusion.getNomFait(), new FaitSymbolique(conclusion.getNomFait(), conclusion.getValeur()));
+			derniereConclusionVisitee = true;
 		}
 		
 	}
